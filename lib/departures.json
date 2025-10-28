@@ -1,0 +1,23 @@
+{
+  "stations": [
+    {
+      "name": "Kista Centrum",
+      "id": 740012883,
+      "allowedDepartures": [
+        "Buss 179",
+        "Tunnelbana 11",
+        "Buss 178",
+        "Bus 514",
+        "Buss 197",
+        "Buss 612",
+        "Buss 685",
+        "Buss 687"
+      ]
+    },
+    {
+      "name": "Helenelund",
+      "id": 740000701,
+      "allowedDepartures": ["Tåg 41"]
+    }
+  ]
+}
