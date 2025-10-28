@@ -1,20 +1,24 @@
 export const formatTimeDifference = (departureTime: string): number | string => {
-  const now = new Date();
+  // Get current time in Swedish timezone
+  const nowInSweden = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Europe/Stockholm" })
+  );
+  
   const [hours, minutes] = departureTime.split(":").map(Number);
 
   const departureDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
+    nowInSweden.getFullYear(),
+    nowInSweden.getMonth(),
+    nowInSweden.getDate(),
     hours,
     minutes
   );
 
-  if (departureDate < now) {
+  if (departureDate < nowInSweden) {
     departureDate.setDate(departureDate.getDate() + 1);
   }
 
-  const differenceInMs = departureDate.getTime() - now.getTime();
+  const differenceInMs = departureDate.getTime() - nowInSweden.getTime();
 
   if (differenceInMs < 0) {
     return "Departed";
