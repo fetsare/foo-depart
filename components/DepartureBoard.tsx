@@ -78,7 +78,7 @@ export default function DepartureBoard({
                 Line
               </th>
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[15%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
-                Time
+                Departure
               </th>
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[18%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                 Station
