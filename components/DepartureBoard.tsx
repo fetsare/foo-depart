@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { type ProcessedDeparture } from "@/lib/types";
 import { fetchDepartures } from "@/lib/actions";
+import { formatMinutesToReadable } from "@/lib/utils";
 import Image from "next/image";
 import Clock from "@/components/Clock";
 
@@ -145,11 +146,11 @@ export default function DepartureBoard({
                         : "text-orange-500"
                     }`}
                   >
-                    {departure.timeLeft} min
+                    {formatMinutesToReadable(departure.timeLeft)}
                   </td>
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">
                     {departure.nextDepartureTimeLeft
-                      ? `${departure.nextDepartureTimeLeft} min`
+                      ? formatMinutesToReadable(departure.nextDepartureTimeLeft)
                       : "-"}
                   </td>
                 </tr>

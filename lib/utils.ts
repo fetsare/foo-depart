@@ -46,3 +46,17 @@ export const formatTimeDifference = (departureTime: string): number | string => 
 export const removeParentheses = (input: string): string => {
   return input.replace(/\s*\(.*?\)/g, "");
 };
+
+export const formatMinutesToReadable = (minutes: number | string): string => {
+  if (typeof minutes !== "number") {
+    return String(minutes);
+  }
+  
+  if (minutes >= 60) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours} h, ${remainingMinutes} min`;
+  }
+  
+  return `${minutes} min`;
+};
