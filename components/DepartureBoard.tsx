@@ -62,7 +62,10 @@ export default function DepartureBoard({
   };
 
   return (
-    <main className="min-h-screen bg-black text-white p-4">
+    <main className="min-h-screen bg-black text-white p-4 relative">
+      <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
+        Ugla
+      </div>
       <div className="flex justify-center gap-10 items-center ">
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
           Last updated: {lastUpdated}
