@@ -78,19 +78,19 @@ export default function DepartureBoard({
                 Line
               </th>
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
-                Departure
-              </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
-                Next
+                Depart
               </th>
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[15%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                 Station
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[25%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[20%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                 Direction
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[22%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[18%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
                 Time Left
+              </th>
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[15%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+                Next
               </th>
             </tr>
           </thead>
@@ -128,11 +128,6 @@ export default function DepartureBoard({
                       {departure.time}
                     </div>
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.nextDeparture || "-"}
-                    </div>
-                  </td>
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                     <div className="whitespace-nowrap overflow-hidden text-ellipsis">
                       {departure.station}
@@ -151,6 +146,11 @@ export default function DepartureBoard({
                     }`}
                   >
                     {departure.timeLeft} min
+                  </td>
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">
+                    {departure.nextDepartureTimeLeft
+                      ? `${departure.nextDepartureTimeLeft} min`
+                      : "-"}
                   </td>
                 </tr>
               );
@@ -185,7 +185,10 @@ export default function DepartureBoard({
                   </td>
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
                     <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
-                  </td>
+                  </td>{" "}
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
+                  </td>{" "}
                 </tr>
               );
             })}

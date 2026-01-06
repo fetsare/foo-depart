@@ -71,7 +71,6 @@ export async function fetchDepartures() {
               allowedDepartures.includes(departure.name) &&
               departure.direction !== "Akalla T-bana"
           );
-        console.log(processedDepartures)
         return processedDepartures;
       } catch (stationError) {
         console.error(
@@ -99,7 +98,6 @@ export async function fetchDepartures() {
   const allDepartures = [...newBusses, ...newTrains]
     .sort((a, b) => (a.timeLeft as number) - (b.timeLeft as number));
 
-  // Group departures by both line name and direction
   const departuresByLineAndDirection = new Map<string, ProcessedDeparture[]>();
   allDepartures.forEach(dep => {
     const key = `${dep.name}|${dep.direction}`;
@@ -114,9 +112,14 @@ export async function fetchDepartures() {
     const currentIndex = sameLine.findIndex(d => d.time === dep.time && d.station === dep.station);
     const nextDep = sameLine[currentIndex + 1];
     
+    let nextDepartureTimeLeft: number | undefined = undefined;
+    if (nextDep && typeof nextDep.timeLeft === 'number') {
+      nextDepartureTimeLeft = nextDep.timeLeft;
+    }
+    
     return {
       ...dep,
-      nextDeparture: nextDep ? nextDep.time : undefined
+      nextDepartureTimeLeft
     };
   });
 

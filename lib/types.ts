@@ -10,7 +10,7 @@ export interface ProcessedDeparture {
   timeLeft: number | string;
   direction: string;
   station: string;
-  nextDeparture?: string;
+  nextDepartureTimeLeft?: number;
 }
 
 export interface ApiDeparture {
