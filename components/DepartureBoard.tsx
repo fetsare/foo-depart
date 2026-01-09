@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { type ProcessedDeparture } from "@/lib/types";
-import { fetchDepartures } from "@/lib/actions";
 import { formatMinutesToReadable } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Clock from "@/components/Clock";
 
@@ -20,27 +20,19 @@ const iconMap: Record<string, string> = {
 export default function DepartureBoard({
   initialDepartures,
 }: DepartureBoardProps) {
-  const [departures, setDepartures] =
-    useState<ProcessedDeparture[]>(initialDepartures);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
+  const router = useRouter();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        const newDepartures = await fetchDepartures();
-        setDepartures(newDepartures);
-        setLastUpdate(new Date());
-      } catch (error) {
-        console.error("Failed to fetch departures:", error);
-      }
-    }, 120000); // 120 seconds
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 30000); // 30 sec
 
     return () => clearInterval(interval);
-  }, []);
+  }, [router]);
 
   const minRows = 5;
-  const placeholderRows = Math.max(minRows - departures.length, 0);
-  const lastUpdated = lastUpdate.toLocaleTimeString("en-GB", {
+  const placeholderRows = Math.max(minRows - initialDepartures.length, 0);
+  const lastUpdated = new Date().toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -78,28 +70,25 @@ export default function DepartureBoard({
           <thead>
             <tr className="text-white">
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[8%]"></th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[10%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                 Line
               </th>
               <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
                 Depart
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[15%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+                Next
+              </th>
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[40%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
                 Station
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[20%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                Direction
-              </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[18%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
-                Time Left
-              </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[15%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
-                Next
+              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+                Time
               </th>
             </tr>
           </thead>
           <tbody>
-            {departures.map((departure, index) => {
+            {initialDepartures.map((departure, index) => {
               const nameSplit = departure.name.split(" ");
               const lineType = nameSplit[0];
               const iconSource = iconMap[lineType] || "/pendel.svg";
@@ -127,23 +116,8 @@ export default function DepartureBoard({
                       {num}
                     </span>
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.time}
-                    </div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.station}
-                    </div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.direction.split(" ")[0]}
-                    </div>
-                  </td>
                   <td
-                    className={`px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap ${
+                    className={`px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap ${
                       (departure.timeLeft as number) <= 10
                         ? "text-red-600"
                         : "text-orange-500"
@@ -151,17 +125,27 @@ export default function DepartureBoard({
                   >
                     {formatMinutesToReadable(departure.timeLeft)}
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">
                     {departure.nextDepartureTimeLeft
                       ? formatMinutesToReadable(departure.nextDepartureTimeLeft)
                       : "-"}
+                  </td>
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      {departure.station} <span className="text-orange-500 mx-1 sm:mx-2">→</span> {departure.direction.split(" ")[0]}
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      {departure.time}
+                    </div>
                   </td>
                 </tr>
               );
             })}
 
             {Array.from({ length: placeholderRows }).map((_, index) => {
-              const adjustedIndex = departures.length + index;
+              const adjustedIndex = initialDepartures.length + index;
               return (
                 <tr
                   key={`placeholder-${index}`}
@@ -176,7 +160,10 @@ export default function DepartureBoard({
                     <div className="w-12 h-6 sm:w-16 sm:h-8 md:w-20 md:h-10 lg:w-24 lg:h-12 bg-gray-800 rounded-xl"></div>
                   </td>
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded"></div>
+                    <div className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 bg-gray-800 rounded ml-auto"></div>
+                  </td>
+                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
                   </td>
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
                     <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded"></div>
@@ -184,15 +171,6 @@ export default function DepartureBoard({
                   <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
                     <div className="w-24 h-6 sm:w-32 sm:h-8 md:w-40 md:h-10 lg:w-48 lg:h-12 bg-gray-800 rounded"></div>
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 bg-gray-800 rounded"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
-                  </td>{" "}
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
-                  </td>{" "}
                 </tr>
               );
             })}
