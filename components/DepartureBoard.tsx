@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { type ProcessedDeparture } from "@/lib/types";
-import { fetchDepartures } from "@/lib/actions";
 import { formatMinutesToReadable } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Clock from "@/components/Clock";
 
@@ -20,27 +20,21 @@ const iconMap: Record<string, string> = {
 export default function DepartureBoard({
   initialDepartures,
 }: DepartureBoardProps) {
-  const [departures, setDepartures] =
-    useState<ProcessedDeparture[]>(initialDepartures);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
+  const router = useRouter();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        const newDepartures = await fetchDepartures();
-        setDepartures(newDepartures);
-        setLastUpdate(new Date());
-      } catch (error) {
-        console.error("Failed to fetch departures:", error);
-      }
+    // Refresh the page data every 120 seconds
+    // This refetches from the server's cached data (shared across all clients)
+    const interval = setInterval(() => {
+      router.refresh();
     }, 120000); // 120 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [router]);
 
   const minRows = 5;
-  const placeholderRows = Math.max(minRows - departures.length, 0);
-  const lastUpdated = lastUpdate.toLocaleTimeString("en-GB", {
+  const placeholderRows = Math.max(minRows - initialDepartures.length, 0);
+  const lastUpdated = new Date().toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -99,7 +93,7 @@ export default function DepartureBoard({
             </tr>
           </thead>
           <tbody>
-            {departures.map((departure, index) => {
+            {initialDepartures.map((departure, index) => {
               const nameSplit = departure.name.split(" ");
               const lineType = nameSplit[0];
               const iconSource = iconMap[lineType] || "/pendel.svg";
@@ -161,7 +155,7 @@ export default function DepartureBoard({
             })}
 
             {Array.from({ length: placeholderRows }).map((_, index) => {
-              const adjustedIndex = departures.length + index;
+              const adjustedIndex = initialDepartures.length + index;
               return (
                 <tr
                   key={`placeholder-${index}`}
