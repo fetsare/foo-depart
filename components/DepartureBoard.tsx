@@ -23,11 +23,9 @@ export default function DepartureBoard({
   const router = useRouter();
 
   useEffect(() => {
-    // Refresh the page data every 120 seconds
-    // This refetches from the server's cached data (shared across all clients)
     const interval = setInterval(() => {
       router.refresh();
-    }, 120000); // 120 seconds
+    }, 30000); // 30 sec
 
     return () => clearInterval(interval);
   }, [router]);
