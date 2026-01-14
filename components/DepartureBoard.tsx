@@ -17,6 +17,28 @@ const iconMap: Record<string, string> = {
   Tunnelbana: "/tunnelbana.svg",
 };
 
+const lineColorMap: Record<string, string> = {
+  Tåg: "bg-[#ec619f]",
+  Tunnelbana: "bg-[#007db8]",
+  Buss: "bg-black",
+  Spårväg: "bg-[#b65f1f]",
+};
+
+const REFRESH_INTERVAL = 30000;
+const MIN_ROWS = 5;
+
+const commonPadding = "px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4";
+const headerTextSize = "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
+const cellTextSize = "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
+
+const getRowBackground = (index: number) =>
+  index % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]";
+
+const getLineColor = (lineType: string) =>
+  lineColorMap[lineType] || "bg-gray-500";
+
+const getIcon = (lineType: string) => iconMap[lineType] || "/pendel.svg";
+
 export default function DepartureBoard({
   initialDepartures,
 }: DepartureBoardProps) {
@@ -25,36 +47,22 @@ export default function DepartureBoard({
   useEffect(() => {
     const interval = setInterval(() => {
       router.refresh();
-    }, 30000); // 30 sec
+    }, REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
   }, [router]);
 
-  const minRows = 5;
-  const placeholderRows = Math.max(minRows - initialDepartures.length, 0);
+  const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
   const lastUpdated = new Date().toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
   });
 
-  const getLineColor = (lineType: string) => {
-    switch (lineType) {
-      case "Tåg":
-        return "bg-[#ec619f] text-white";
-      case "Tunnelbana":
-        return "bg-[#007db8] text-white";
-      case "Buss":
-        return "bg-black text-white";
-      case "Spårväg":
-        return "bg-[#b65f1f] text-white";
-      default:
-        return "bg-gray-500 text-white";
-    }
-  };
-
   return (
-    <main className="cursor-none min-h-screen bg-black text-white p-4 relative">
+    <main
+      className={`${process.env.NODE_ENV} min-h-screen bg-black text-white p-4 relative`}
+    >
       <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
         Ugla
       </div>
@@ -69,73 +77,88 @@ export default function DepartureBoard({
         <table className="w-full border-separate border-spacing-y-1 sm:border-spacing-y-2 table-fixed">
           <thead>
             <tr className="text-white">
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[8%]"></th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[10%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              <th className={`${commonPadding} text-left w-[8%]`}></th>
+              <th
+                className={`${commonPadding} text-left w-[10%] ${headerTextSize}`}
+              >
                 Line
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+              <th
+                className={`${commonPadding} text-left w-[13%] ${headerTextSize} text-orange-500`}
+              >
                 Depart
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+              <th
+                className={`${commonPadding} text-left w-[13%] ${headerTextSize} text-orange-500`}
+              >
                 Next
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left w-[40%] text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              <th
+                className={`${commonPadding} text-left w-[40%] ${headerTextSize}`}
+              >
                 Station
               </th>
-              <th className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right w-[12%] text-xl sm:text-2xl md:text-3xl lg:text-4xl text-orange-500">
+              <th
+                className={`${commonPadding} text-right w-[12%] ${headerTextSize} text-orange-500`}
+              >
                 Time
               </th>
             </tr>
           </thead>
           <tbody>
             {initialDepartures.map((departure, index) => {
-              const nameSplit = departure.name.split(" ");
-              const lineType = nameSplit[0];
-              const iconSource = iconMap[lineType] || "/pendel.svg";
-              const num = nameSplit[1];
-              const lineColorClass = getLineColor(lineType);
+              const lineType = departure.transportType;
+              const isUrgent = (departure.timeLeft as number) <= 10;
 
               return (
                 <tr
                   key={`departure-${index}`}
-                  className={index % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]"}
+                  className={getRowBackground(index)}
                 >
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                  <td className={commonPadding}>
                     <Image
-                      src={iconSource}
+                      src={getIcon(lineType)}
                       alt={`${lineType} icon`}
                       width={60}
                       height={60}
                       className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16"
                     />
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                  <td className={commonPadding}>
                     <span
-                      className={`${lineColorClass} rounded-xl sm:rounded-2xl px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl inline-block`}
+                      className={`${getLineColor(
+                        lineType
+                      )} rounded-xl sm:rounded-2xl px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 font-bold ${cellTextSize} inline-block`}
                     >
-                      {num}
+                      {departure.name}
                     </span>
                   </td>
                   <td
-                    className={`px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap ${
-                      (departure.timeLeft as number) <= 10
-                        ? "text-red-600"
-                        : "text-orange-500"
+                    className={`${commonPadding} text-left font-bold ${cellTextSize} whitespace-nowrap ${
+                      isUrgent ? "text-red-600" : "text-orange-500"
                     }`}
                   >
                     {formatMinutesToReadable(departure.timeLeft)}
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl whitespace-nowrap">
+                  <td
+                    className={`${commonPadding} text-left text-orange-500 ${cellTextSize} whitespace-nowrap`}
+                  >
                     {departure.nextDepartureTimeLeft
                       ? formatMinutesToReadable(departure.nextDepartureTimeLeft)
                       : "-"}
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                  <td
+                    className={`${commonPadding} text-left text-white ${cellTextSize}`}
+                  >
                     <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.station} <span className="text-orange-500 mx-1 sm:mx-2">→</span> {departure.direction.split(" ")[0]}
+                      {departure.station}{" "}
+                      <span className="text-orange-500 mx-1 sm:mx-2">→</span>{" "}
+                      {departure.direction.split(" ")[0]}
                     </div>
                   </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-right text-orange-500 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+                  <td
+                    className={`${commonPadding} text-right text-orange-500 ${cellTextSize}`}
+                  >
                     <div className="whitespace-nowrap overflow-hidden text-ellipsis">
                       {departure.time}
                     </div>
@@ -144,36 +167,31 @@ export default function DepartureBoard({
               );
             })}
 
-            {Array.from({ length: placeholderRows }).map((_, index) => {
-              const adjustedIndex = initialDepartures.length + index;
-              return (
-                <tr
-                  key={`placeholder-${index}`}
-                  className={
-                    adjustedIndex % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]"
-                  }
-                >
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-gray-800 rounded"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-12 h-6 sm:w-16 sm:h-8 md:w-20 md:h-10 lg:w-24 lg:h-12 bg-gray-800 rounded-xl"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 bg-gray-800 rounded ml-auto"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded"></div>
-                  </td>
-                  <td className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
-                    <div className="w-24 h-6 sm:w-32 sm:h-8 md:w-40 md:h-10 lg:w-48 lg:h-12 bg-gray-800 rounded"></div>
-                  </td>
-                </tr>
-              );
-            })}
+            {Array.from({ length: placeholderRows }).map((_, index) => (
+              <tr
+                key={`placeholder-${index}`}
+                className={getRowBackground(initialDepartures.length + index)}
+              >
+                <td className={commonPadding}>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-gray-800 rounded"></div>
+                </td>
+                <td className={commonPadding}>
+                  <div className="w-12 h-6 sm:w-16 sm:h-8 md:w-20 md:h-10 lg:w-24 lg:h-12 bg-gray-800 rounded-xl"></div>
+                </td>
+                <td className={commonPadding}>
+                  <div className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 bg-gray-800 rounded ml-auto"></div>
+                </td>
+                <td className={commonPadding}>
+                  <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
+                </td>
+                <td className={commonPadding}>
+                  <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded"></div>
+                </td>
+                <td className={commonPadding}>
+                  <div className="w-24 h-6 sm:w-32 sm:h-8 md:w-40 md:h-10 lg:w-48 lg:h-12 bg-gray-800 rounded"></div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

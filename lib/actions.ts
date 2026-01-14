@@ -47,12 +47,25 @@ export async function fetchDepartures() {
               .split(":")
               .slice(0, 2)
               .join(":");
-            const transportName = departure.name.match(
-              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*\d+[A-Z]?\b/i
+            const match = departure.name.match(
+              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*(\d+[A-Z]?)\b/i
             );
             const timeDifference = formatTimeDifference(departure.time);
+
+            if (!match) {
+              return {
+                name: "Unknown",
+                transportType: "Unknown",
+                time: timeWithoutSeconds,
+                timeLeft: timeDifference,
+                direction: removeParentheses(departure.direction),
+                station: stationName,
+              };
+            }
+
             return {
-              name: transportName ? transportName[0] : "Unknown",
+              name: match[2],
+              transportType: match[1],
               time: timeWithoutSeconds,
               timeLeft: timeDifference,
               direction: removeParentheses(departure.direction),
@@ -71,6 +84,7 @@ export async function fetchDepartures() {
               //departure.direction !== "Akalla T-bana"
             );
           });
+        console.log(processedDepartures);
         return processedDepartures;
       } catch (stationError) {
         console.error(
@@ -86,7 +100,7 @@ export async function fetchDepartures() {
   const newTrains: ProcessedDeparture[] = [];
 
   allResults.flat().forEach((result) => {
-    switch (result.name.split(" ")[0]) {
+    switch (result.transportType) {
       case "Buss":
         newBusses.push(result);
         break;

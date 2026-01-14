@@ -7,6 +7,7 @@ export interface Station {
 
 export interface ProcessedDeparture {
   name: string;
+  transportType: string;
   time: string;
   timeLeft: number | string;
   direction: string;

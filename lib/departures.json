@@ -3,27 +3,19 @@
     {
       "name": "Kista Centrum",
       "id": 740012883,
-      "allowedDepartures": [
-        "Buss 179",
-        "Tunnelbana 11",
-        "Buss 178",
-        "Buss 197",
-        "Buss 612",
-        "Buss 685",
-        "Buss 687"
-      ]
+      "allowedDepartures": ["179", "11", "178", "197", "612", "685", "687"]
     },
     {
       "name": "Helenelund",
       "id": 740000701,
-      "allowedDepartures": ["Tåg 41"]
+      "allowedDepartures": ["41"]
     },
     {
       "name": "Kista alléväg",
       "id": 740016366,
-      "allowedDepartures": ["Buss 514X"],
+      "allowedDepartures": ["514X"],
       "minTimeThresholds": {
-        "Buss 514X": 1
+        "514X": 1
       }
     }
   ]
