@@ -54,7 +54,7 @@ export default function DepartureBoard({
   };
 
   return (
-    <main className="min-h-screen bg-black text-white p-4 relative">
+    <main className="cursor-none min-h-screen bg-black text-white p-4 relative">
       <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
         Ugla
       </div>
