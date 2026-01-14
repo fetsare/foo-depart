@@ -41,7 +41,6 @@ export async function fetchDepartures() {
 
         const data = await response.json();
         const departures: ApiDeparture[] = data.Departure || [];
-        console.log(departures)
         const processedDepartures = departures
           .map((departure) => {
             const timeWithoutSeconds = departure.time
@@ -60,15 +59,18 @@ export async function fetchDepartures() {
               station: stationName,
             };
           })
-          .filter(
-            (departure) =>
+          .filter((departure) => {
+            const minTimeThreshold =
+              station.minTimeThresholds?.[departure.name] ?? 8;
+            return (
               departure.time !== "Departed" &&
               departure.name !== "Unknown" &&
               typeof departure.timeLeft === "number" &&
-              departure.timeLeft > 8 &&
+              departure.timeLeft > minTimeThreshold &&
               allowedDepartures.includes(departure.name)
               //departure.direction !== "Akalla T-bana"
-          );
+            );
+          });
         return processedDepartures;
       } catch (stationError) {
         console.error(

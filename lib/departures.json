@@ -21,7 +21,10 @@
     {
       "name": "Kista alléväg",
       "id": 740016366,
-      "allowedDepartures": ["Buss 514X"]
+      "allowedDepartures": ["Buss 514X"],
+      "minTimeThresholds": {
+        "Buss 514X": 1
+      }
     }
   ]
 }

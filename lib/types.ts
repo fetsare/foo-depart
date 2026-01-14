@@ -2,6 +2,7 @@ export interface Station {
   name: string;
   id: number;
   allowedDepartures: string[];
+  minTimeThresholds?: Record<string, number>;
 }
 
 export interface ProcessedDeparture {
