@@ -32,7 +32,6 @@ export async function fetchDepartures() {
             cache: "no-store",
           }
         );
-
         if (!response.ok) {
           console.error(
             `Failed to fetch departures for station ${station.name}`
@@ -42,7 +41,7 @@ export async function fetchDepartures() {
 
         const data = await response.json();
         const departures: ApiDeparture[] = data.Departure || [];
-
+        console.log(departures)
         const processedDepartures = departures
           .map((departure) => {
             const timeWithoutSeconds = departure.time
@@ -50,10 +49,9 @@ export async function fetchDepartures() {
               .slice(0, 2)
               .join(":");
             const transportName = departure.name.match(
-              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*\d+\b/i
+              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*\d+[A-Z]?\b/i
             );
             const timeDifference = formatTimeDifference(departure.time);
-
             return {
               name: transportName ? transportName[0] : "Unknown",
               time: timeWithoutSeconds,
@@ -68,8 +66,8 @@ export async function fetchDepartures() {
               departure.name !== "Unknown" &&
               typeof departure.timeLeft === "number" &&
               departure.timeLeft > 8 &&
-              allowedDepartures.includes(departure.name) &&
-              departure.direction !== "Akalla T-bana"
+              allowedDepartures.includes(departure.name)
+              //departure.direction !== "Akalla T-bana"
           );
         return processedDepartures;
       } catch (stationError) {
@@ -94,32 +92,34 @@ export async function fetchDepartures() {
         newTrains.push(result);
     }
   });
-
-  const allDepartures = [...newBusses, ...newTrains]
-    .sort((a, b) => (a.timeLeft as number) - (b.timeLeft as number));
+  const allDepartures = [...newBusses, ...newTrains].sort(
+    (a, b) => (a.timeLeft as number) - (b.timeLeft as number)
+  );
 
   const departuresByLineAndDirection = new Map<string, ProcessedDeparture[]>();
-  allDepartures.forEach(dep => {
+  allDepartures.forEach((dep) => {
     const key = `${dep.name}|${dep.direction}`;
     const existing = departuresByLineAndDirection.get(key) || [];
     existing.push(dep);
     departuresByLineAndDirection.set(key, existing);
   });
 
-  const departuresWithNext = allDepartures.map(dep => {
+  const departuresWithNext = allDepartures.map((dep) => {
     const key = `${dep.name}|${dep.direction}`;
     const sameLine = departuresByLineAndDirection.get(key) || [];
-    const currentIndex = sameLine.findIndex(d => d.time === dep.time && d.station === dep.station);
+    const currentIndex = sameLine.findIndex(
+      (d) => d.time === dep.time && d.station === dep.station
+    );
     const nextDep = sameLine[currentIndex + 1];
-    
+
     let nextDepartureTimeLeft: number | undefined = undefined;
-    if (nextDep && typeof nextDep.timeLeft === 'number') {
+    if (nextDep && typeof nextDep.timeLeft === "number") {
       nextDepartureTimeLeft = nextDep.timeLeft;
     }
-    
+
     return {
       ...dep,
-      nextDepartureTimeLeft
+      nextDepartureTimeLeft,
     };
   });
 
