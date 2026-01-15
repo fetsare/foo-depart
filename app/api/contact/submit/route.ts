@@ -45,8 +45,8 @@ export async function POST(request: Request) {
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    const approveUrl = `${baseUrl}/api/contact/approve?token=${token}`;
-    const rejectUrl = `${baseUrl}/api/contact/reject?token=${token}`;
+    const approveUrl = `${baseUrl}/api/contact/approve?token=${encodeURIComponent(token)}`;
+    const rejectUrl = `${baseUrl}/api/contact/reject?token=${encodeURIComponent(token)}`;
 
     await resend.emails.send({
       from: process.env.ADMIN_EMAIL!,

@@ -68,121 +68,139 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Submit an Inquiry</h1>
-      <Link href={"/"} className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline">
-        Back
-      </Link>
-      <p className="mb-6 text-gray-600">
-        Report missing bus or train information, suggest improvements, or share
-        your feedback about the departure board.
-      </p>
-
-      {status === "success" && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          Inquiry submitted successfully! I will review it soon.
-        </div>
-      )}
-
-      {status === "ratelimit" && (
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
-          Too many submissions. Please try again later.
-        </div>
-      )}
-
-      {status === "error" && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          Something went wrong. Please try again.
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div
-          style={{ position: "absolute", left: "-9999px" }}
-          aria-hidden="true"
+    <div className="min-h-screen bg-black text-white p-6">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Submit an Inquiry</h1>
+        <Link
+          href={"/"}
+          className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline"
         >
-          <label htmlFor="website">Leave this field empty</label>
-          <input
-            type="text"
-            id="website"
-            name="website"
-            tabIndex={-1}
-            autoComplete="off"
-            value={honeypot}
-            onChange={(e) => setHoneypot(e.target.value)}
-          />
-        </div>
+          Back
+        </Link>
+        <p className="mb-6 text-gray-400">
+          Report missing bus or train information, suggest improvements, or
+          share your feedback about the departure board. Once approved, an issue
+          will be automatically created in the{" "}
+          <a 
+            href="https://github.com/fetsare/foo-depart" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-blue-300 underline hover:no-underline transition-colors"
+          >
+            GitHub repository
+          </a>.
+        </p>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Name</label>
-          <input
-            type="text"
-            required
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.name && (
-            <p className="text-red-600 text-sm mt-1">{errors.name}</p>
-          )}
-        </div>
+        {status === "success" && (
+          <div className="bg-green-900 border border-green-400 text-green-200 px-4 py-3 rounded mb-4">
+            Inquiry submitted successfully! I will review it soon.
+          </div>
+        )}
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Email</label>
-          <input
-            type="email"
-            required
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.email && (
-            <p className="text-red-600 text-sm mt-1">{errors.email}</p>
-          )}
-        </div>
+        {status === "ratelimit" && (
+          <div className="bg-yellow-900 border border-yellow-400 text-yellow-200 px-4 py-3 rounded mb-4">
+            Too many submissions. Please try again later.
+          </div>
+        )}
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Title</label>
-          <input
-            type="text"
-            required
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.title && (
-            <p className="text-red-600 text-sm mt-1">{errors.title}</p>
-          )}
-        </div>
+        {status === "error" && (
+          <div className="bg-red-900 border border-red-400 text-red-200 px-4 py-3 rounded mb-4">
+            Something went wrong. Please try again.
+          </div>
+        )}
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Description</label>
-          <textarea
-            required
-            rows={6}
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.description && (
-            <p className="text-red-600 text-sm mt-1">{errors.description}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div
+            style={{ position: "absolute", left: "-9999px" }}
+            aria-hidden="true"
+          >
+            <label htmlFor="website">Leave this field empty</label>
+            <input
+              type="text"
+              id="website"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
-        >
-          {status === "submitting" ? "Submitting..." : "Submit Inquiry"}
-        </button>
-      </form>
+          <div>
+            <label className="block text-sm font-medium mb-2">Name</label>
+            <input
+              type="text"
+              required
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+            />
+            {errors.name && (
+              <p className="text-red-400 text-sm mt-1">{errors.name}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Email</label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+            />
+            {errors.email && (
+              <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Title</label>
+            <input
+              type="text"
+              required
+              value={formData.title}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+            />
+            {errors.title && (
+              <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Description
+            </label>
+            <textarea
+              required
+              rows={6}
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 text-white"
+            />
+            {errors.description && (
+              <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={status === "submitting"}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
+          >
+            {status === "submitting" ? "Submitting..." : "Submit Inquiry"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

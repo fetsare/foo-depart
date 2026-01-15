@@ -93,7 +93,6 @@ ${description}
       labels: ["inquiry", "needs-review"],
     });
 
-    // Create branch name (sanitized)
     const branchName = `inquiry/${issue.data.number}-${title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
