@@ -22,6 +22,7 @@ export default function ContactForm() {
     title: "",
     description: "",
   });
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState<
     Partial<Record<keyof ContactFormData, string>>
@@ -38,7 +39,7 @@ export default function ContactForm() {
       const response = await fetch("/api/contact/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedData),
+        body: JSON.stringify({ ...validatedData, website: honeypot }),
       });
 
       if (response.ok) {
@@ -83,6 +84,19 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
+          <label htmlFor="website">Leave this field empty</label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
+        </div>
+        
         <div>
           <label className="block text-sm font-medium mb-2">Name</label>
           <input
