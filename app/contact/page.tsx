@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -69,6 +70,9 @@ export default function ContactForm() {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Inquiry</h1>
+      <Link href={"/"} className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline">
+        Back
+      </Link>
       <p className="mb-6 text-gray-600">
         Report missing bus or train information, suggest improvements, or share
         your feedback about the departure board.

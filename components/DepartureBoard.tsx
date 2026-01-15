@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 import { type ProcessedDeparture } from "@/lib/types";
 import { formatMinutesToReadable } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Clock from "@/components/Clock";
+import Link from "next/link";
 
 interface DepartureBoardProps {
   initialDepartures: ProcessedDeparture[];
@@ -43,6 +44,8 @@ export default function DepartureBoard({
   initialDepartures,
 }: DepartureBoardProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const hideContact = searchParams.has("hideContact");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -61,8 +64,18 @@ export default function DepartureBoard({
 
   return (
     <main
-      className={`${process.env.NODE_ENV} min-h-screen bg-black text-white p-4 relative`}
+      className={`${
+        process.env.NODE_ENV == "production" && "cursor-none"
+      } min-h-screen bg-black text-white p-4 relative`}
     >
+      {!hideContact && (
+        <Link
+          href={"/contact"}
+          className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline"
+        >
+          Contact
+        </Link>
+      )}
       <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
         Ugla
       </div>
