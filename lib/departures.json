@@ -3,23 +3,25 @@
     {
       "name": "Kista Centrum",
       "id": 740012883,
-      "allowedDepartures": ["179", "11", "178", "197", "612", "685", "687"],
-      "directionFilters": {
-        "11": "Akalla"
-      }
+      "departures": [
+        { "line": "179" },
+        { "line": "11" },
+        { "line": "178" },
+        { "line": "197" },
+        { "line": "612" },
+        { "line": "685" },
+        { "line": "687" }
+      ]
     },
     {
       "name": "Helenelund",
       "id": 740000701,
-      "allowedDepartures": ["41"]
+      "departures": [{ "line": "41" }]
     },
     {
       "name": "Kista alléväg",
       "id": 740016366,
-      "allowedDepartures": ["514X"],
-      "minTimeThresholds": {
-        "514X": 1
-      }
+      "departures": [{ "line": "514X", "minTimeThreshold": 1 }]
     }
   ]
 }

@@ -1,9 +1,13 @@
+export interface DepartureConfig {
+  line: string;
+  directions?: string[];
+  minTimeThreshold?: number;
+}
+
 export interface Station {
   name: string;
   id: number;
-  allowedDepartures: string[];
-  directionFilters?: Record<string, string | string[]>;
-  minTimeThresholds?: Record<string, number>;
+  departures: DepartureConfig[];
 }
 
 export interface ProcessedDeparture {

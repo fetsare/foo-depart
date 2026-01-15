@@ -24,7 +24,6 @@ export async function fetchDepartures() {
       try {
         const stationName = station.name;
         const id = station.id;
-        const allowedDepartures = station.allowedDepartures;
 
         const response = await fetch(
           `${RESROBOT_API_BASE_URL}?id=${id}&format=json&accessId=${RESROBOT_ACCESS_ID}&duration=${API_DURATION}`,
@@ -41,6 +40,11 @@ export async function fetchDepartures() {
 
         const data = await response.json();
         const departures: ApiDeparture[] = data.Departure || [];
+        
+        const departureConfigMap = new Map(
+          station.departures.map(d => [d.line, d])
+        );
+        
         const processedDepartures = departures
           .map((departure) => {
             const timeWithoutSeconds = departure.time
@@ -73,26 +77,27 @@ export async function fetchDepartures() {
             };
           })
           .filter((departure) => {
-            const minTimeThreshold =
-              station.minTimeThresholds?.[departure.name] ?? 8;
-            const directionFilter = station.directionFilters?.[departure.name];
+            const config = departureConfigMap.get(departure.name);
             
-            let directionMatches = true;
-            if (directionFilter) {
-              const filterArray = Array.isArray(directionFilter) ? directionFilter : [directionFilter];
-              directionMatches = filterArray.some(filter => 
-                departure.direction.toLowerCase().includes(filter.toLowerCase())
-              );
+            if (!config) return false;
+            
+            if (departure.time === "Departed" || 
+                departure.name === "Unknown" || 
+                typeof departure.timeLeft !== "number") {
+              return false;
             }
             
-            return (
-              departure.time !== "Departed" &&
-              departure.name !== "Unknown" &&
-              typeof departure.timeLeft === "number" &&
-              departure.timeLeft > minTimeThreshold &&
-              allowedDepartures.includes(departure.name) &&
-              directionMatches
-            );
+            const minTimeThreshold = config.minTimeThreshold ?? 8;
+            if (departure.timeLeft <= minTimeThreshold) return false;
+            
+            if (config.directions) {
+              const directionMatches = config.directions.some(filter => 
+                departure.direction.toLowerCase().includes(filter.toLowerCase())
+              );
+              if (!directionMatches) return false;
+            }
+            
+            return true;
           });
         return processedDepartures;
       } catch (stationError) {
