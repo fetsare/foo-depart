@@ -4,7 +4,11 @@ import jwt from "jsonwebtoken";
 import rateLimit from "../../rateLimit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const JWT_SECRET = process.env.JWT_SECRET!;
+const rawJwtSecret = process.env.JWT_SECRET;
+if (!rawJwtSecret) {
+  throw new Error("JWT_SECRET environment variable is not set");
+}
+const JWT_SECRET = rawJwtSecret;
 
 const limiter = rateLimit(3, 60 * 60 * 1000);
 
