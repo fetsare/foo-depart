@@ -68,13 +68,15 @@ export default function DepartureBoard({
         process.env.NODE_ENV == "production" && "cursor-none"
       } min-h-screen bg-black text-white p-4 relative`}
     >
-      {!hideContact && (
+      {!hideContact ? (
         <Link
           href={"/contact"}
           className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline"
         >
           Contact
         </Link>
+      ) : (
+        <Clock />
       )}
       <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
         Ugla
@@ -83,7 +85,6 @@ export default function DepartureBoard({
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
           Last updated: {lastUpdated}
         </p>
-        <Clock />
       </div>
 
       <div className="overflow-x-auto">
