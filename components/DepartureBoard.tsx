@@ -98,9 +98,9 @@ export default function DepartureBoard({
                 Line
               </th>
               <th
-                className={`${commonPadding} text-left w-[13%] ${headerTextSize} text-orange-500`}
+                className={`${commonPadding} text-left w-[17%] ${headerTextSize} text-orange-500`}
               >
-                Depart
+                Departs in
               </th>
               <th
                 className={`${commonPadding} text-left w-[13%] ${headerTextSize} text-orange-500`}
