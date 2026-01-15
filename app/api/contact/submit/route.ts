@@ -10,7 +10,7 @@ if (!rawJwtSecret) {
 }
 const JWT_SECRET = rawJwtSecret;
 
-const limiter = rateLimit(3, 60 * 60 * 1000);
+const limiter = rateLimit(2, 60 * 60 * 1000);
 
 export async function POST(request: Request) {
   try {
