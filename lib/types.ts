@@ -2,6 +2,7 @@ export interface Station {
   name: string;
   id: number;
   allowedDepartures: string[];
+  directionFilters?: Record<string, string | string[]>;
   minTimeThresholds?: Record<string, number>;
 }
 

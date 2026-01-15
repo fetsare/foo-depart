@@ -3,7 +3,10 @@
     {
       "name": "Kista Centrum",
       "id": 740012883,
-      "allowedDepartures": ["179", "11", "178", "197", "612", "685", "687"]
+      "allowedDepartures": ["179", "11", "178", "197", "612", "685", "687"],
+      "directionFilters": {
+        "11": "Akalla"
+      }
     },
     {
       "name": "Helenelund",

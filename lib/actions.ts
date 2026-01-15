@@ -75,13 +75,23 @@ export async function fetchDepartures() {
           .filter((departure) => {
             const minTimeThreshold =
               station.minTimeThresholds?.[departure.name] ?? 8;
+            const directionFilter = station.directionFilters?.[departure.name];
+            
+            let directionMatches = true;
+            if (directionFilter) {
+              const filterArray = Array.isArray(directionFilter) ? directionFilter : [directionFilter];
+              directionMatches = filterArray.some(filter => 
+                departure.direction.toLowerCase().includes(filter.toLowerCase())
+              );
+            }
+            
             return (
               departure.time !== "Departed" &&
               departure.name !== "Unknown" &&
               typeof departure.timeLeft === "number" &&
               departure.timeLeft > minTimeThreshold &&
-              allowedDepartures.includes(departure.name)
-              //departure.direction !== "Akalla T-bana"
+              allowedDepartures.includes(departure.name) &&
+              directionMatches
             );
           });
         return processedDepartures;
