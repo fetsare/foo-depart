@@ -65,7 +65,7 @@ export default function DepartureBoard({
   return (
     <main
       className={`${
-        process.env.NODE_ENV == "production" && "cursor-none"
+        hideContact && "cursor-none"
       } min-h-screen bg-black text-white p-4 relative`}
     >
       {!hideContact ? (
