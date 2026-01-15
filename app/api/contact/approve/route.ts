@@ -8,10 +8,29 @@ const octokit = new Octokit({
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const JWT_SECRET = process.env.JWT_SECRET!;
+const rawJwtSecret = process.env.JWT_SECRET;
+if (!rawJwtSecret) {
+  throw new Error("JWT_SECRET environment variable is not set");
+}
+const JWT_SECRET = rawJwtSecret;
 
-const GITHUB_OWNER = process.env.GITHUB_OWNER!;
-const GITHUB_REPO = process.env.GITHUB_REPO!;
+const rawAdminEmail = process.env.ADMIN_EMAIL;
+if (!rawAdminEmail) {
+  throw new Error("ADMIN_EMAIL environment variable is not set");
+}
+const ADMIN_EMAIL = rawAdminEmail;
+
+const rawGithubOwner = process.env.GITHUB_OWNER;
+if (!rawGithubOwner) {
+  throw new Error("GITHUB_OWNER environment variable is not set");
+}
+const GITHUB_OWNER = rawGithubOwner;
+
+const rawGithubRepo = process.env.GITHUB_REPO;
+if (!rawGithubRepo) {
+  throw new Error("GITHUB_REPO environment variable is not set");
+}
+const GITHUB_REPO = rawGithubRepo;
 
 interface InquiryToken {
   name: string;
@@ -94,7 +113,7 @@ ${description}
     });
 
     await resend.emails.send({
-      from: process.env.ADMIN_EMAIL!,
+      from: ADMIN_EMAIL,
       to: email,
       subject: "Your inquiry has been approved!",
       text: `
