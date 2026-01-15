@@ -45,6 +45,8 @@ export default function ContactForm() {
       if (response.ok) {
         setStatus("success");
         setFormData({ name: "", email: "", title: "", description: "" });
+      } else if (response.status === 429) {
+        setStatus("ratelimit");
       } else {
         setStatus("error");
       }
@@ -68,12 +70,19 @@ export default function ContactForm() {
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit an Inquiry</h1>
       <p className="mb-6 text-gray-600">
-        Report missing bus or train information, suggest improvements, or share your feedback about the departure board.
+        Report missing bus or train information, suggest improvements, or share
+        your feedback about the departure board.
       </p>
 
       {status === "success" && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
           Inquiry submitted successfully! I will review it soon.
+        </div>
+      )}
+
+      {status === "ratelimit" && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          Too many submissions. Please try again later.
         </div>
       )}
 
@@ -84,7 +93,10 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
+        <div
+          style={{ position: "absolute", left: "-9999px" }}
+          aria-hidden="true"
+        >
           <label htmlFor="website">Leave this field empty</label>
           <input
             type="text"
@@ -96,7 +108,7 @@ export default function ContactForm() {
             onChange={(e) => setHoneypot(e.target.value)}
           />
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium mb-2">Name</label>
           <input

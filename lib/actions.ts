@@ -84,7 +84,6 @@ export async function fetchDepartures() {
               //departure.direction !== "Akalla T-bana"
             );
           });
-        console.log(processedDepartures);
         return processedDepartures;
       } catch (stationError) {
         console.error(

@@ -27,7 +27,7 @@ const lineColorMap: Record<string, string> = {
 const REFRESH_INTERVAL = 30000;
 const MIN_ROWS = 5;
 
-const commonPadding = "px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4";
+const commonPadding = "px-2 sm:px-4 md:px-6 py-1 sm:py-1.5 md:py-2";
 const headerTextSize = "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
 const cellTextSize = "text-xl sm:text-2xl md:text-3xl lg:text-4xl";
 
