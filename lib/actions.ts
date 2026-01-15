@@ -7,17 +7,19 @@ import {
   type ApiDeparture,
 } from "@/lib/types";
 import { formatTimeDifference, removeParentheses } from "@/lib/utils";
+import {
+  RESROBOT_API_BASE_URL,
+  RESROBOT_ACCESS_ID,
+  API_DURATION,
+  DEFAULT_MIN_TIME_THRESHOLD,
+  MAX_DEPARTURES_TO_DISPLAY,
+  validateConfig,
+} from "@/lib/constants";
 
 const { stations } = data as { stations: Station[] };
 
-const RESROBOT_API_BASE_URL = process.env.RESROBOT_API_BASE_URL;
-const RESROBOT_ACCESS_ID = process.env.RESROBOT_ACCESS_ID;
-const API_DURATION = process.env.API_DURATION || "120";
-
 export async function fetchDepartures() {
-  if (!RESROBOT_ACCESS_ID) {
-    throw new Error("API access ID is missing");
-  }
+  validateConfig();
 
   const allResults = await Promise.all(
     stations.map(async (station) => {
@@ -40,11 +42,11 @@ export async function fetchDepartures() {
 
         const data = await response.json();
         const departures: ApiDeparture[] = data.Departure || [];
-        
+
         const departureConfigMap = new Map(
-          station.departures.map(d => [d.line, d])
+          station.departures.map((d) => [d.line, d])
         );
-        
+
         const processedDepartures = departures
           .map((departure) => {
             const timeWithoutSeconds = departure.time
@@ -78,25 +80,28 @@ export async function fetchDepartures() {
           })
           .filter((departure) => {
             const config = departureConfigMap.get(departure.name);
-            
+
             if (!config) return false;
-            
-            if (departure.time === "Departed" || 
-                departure.name === "Unknown" || 
-                typeof departure.timeLeft !== "number") {
+
+            if (
+              departure.time === "Departed" ||
+              departure.name === "Unknown" ||
+              typeof departure.timeLeft !== "number"
+            ) {
               return false;
             }
-            
-            const minTimeThreshold = config.minTimeThreshold ?? 8;
+
+            const minTimeThreshold =
+              config.minTimeThreshold ?? DEFAULT_MIN_TIME_THRESHOLD;
             if (departure.timeLeft <= minTimeThreshold) return false;
-            
+
             if (config.directions) {
-              const directionMatches = config.directions.some(filter => 
+              const directionMatches = config.directions.some((filter) =>
                 departure.direction.toLowerCase().includes(filter.toLowerCase())
               );
               if (!directionMatches) return false;
             }
-            
+
             return true;
           });
         return processedDepartures;
@@ -153,5 +158,5 @@ export async function fetchDepartures() {
     };
   });
 
-  return departuresWithNext.slice(0, 10);
+  return departuresWithNext.slice(0, MAX_DEPARTURES_TO_DISPLAY);
 }

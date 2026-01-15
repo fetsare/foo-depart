@@ -1,23 +1,29 @@
+import { DRÄGG_START_HOUR, DRÄGG_END_HOUR } from "@/lib/constants";
+
 export const getAdjustedStockholmTime = (): Date => {
   const nowInSweden = new Date(
     new Date().toLocaleString("en-US", { timeZone: "Europe/Stockholm" })
   );
-  
+
   const currentHour = nowInSweden.getHours();
-  
-  if (currentHour >= 0 && currentHour <= 3) {
+
+  if (currentHour >= DRÄGG_START_HOUR && currentHour <= DRÄGG_END_HOUR) {
     const minutesToSubtract = currentHour + 1;
-    const adjustedTime = new Date(nowInSweden.getTime() - minutesToSubtract * 60 * 1000);
+    const adjustedTime = new Date(
+      nowInSweden.getTime() - minutesToSubtract * 60 * 1000
+    );
     return adjustedTime;
   }
-  
+
   return nowInSweden;
 };
 
-export const formatTimeDifference = (departureTime: string): number | string => {
+export const formatTimeDifference = (
+  departureTime: string
+): number | string => {
   // Get adjusted time in Swedish timezone
   const nowInSweden = getAdjustedStockholmTime();
-  
+
   const [hours, minutes] = departureTime.split(":").map(Number);
 
   const departureDate = new Date(
