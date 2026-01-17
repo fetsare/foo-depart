@@ -103,9 +103,9 @@ export default function DepartureBoard({
                 Departs
               </th>
               <th
-                className={`${commonPadding} text-left w-[13%] ${headerTextSize} text-orange-500`}
+                className={`${commonPadding} text-left w-[12%] ${headerTextSize} text-orange-500`}
               >
-                Next
+                Time
               </th>
               <th
                 className={`${commonPadding} text-left w-[40%] ${headerTextSize}`}
@@ -113,9 +113,9 @@ export default function DepartureBoard({
                 Station
               </th>
               <th
-                className={`${commonPadding} text-right w-[12%] ${headerTextSize} text-orange-500`}
+                className={`${commonPadding} text-right w-[13%] ${headerTextSize} text-orange-500`}
               >
-                Time
+                Next
               </th>
             </tr>
           </thead>
@@ -155,11 +155,11 @@ export default function DepartureBoard({
                     {formatMinutesToReadable(departure.timeLeft)}
                   </td>
                   <td
-                    className={`${commonPadding} text-left text-orange-500 ${cellTextSize} whitespace-nowrap`}
+                    className={`${commonPadding} text-left text-orange-500 ${cellTextSize}`}
                   >
-                    {departure.nextDepartureTimeLeft
-                      ? formatMinutesToReadable(departure.nextDepartureTimeLeft)
-                      : "-"}
+                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      {departure.time}
+                    </div>
                   </td>
                   <td
                     className={`${commonPadding} text-left text-white ${cellTextSize}`}
@@ -171,11 +171,11 @@ export default function DepartureBoard({
                     </div>
                   </td>
                   <td
-                    className={`${commonPadding} text-right text-orange-500 ${cellTextSize}`}
+                    className={`${commonPadding} text-right text-orange-500 ${cellTextSize} whitespace-nowrap`}
                   >
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
-                      {departure.time}
-                    </div>
+                    {departure.nextDepartureTimeLeft
+                      ? formatMinutesToReadable(departure.nextDepartureTimeLeft)
+                      : "-"}
                   </td>
                 </tr>
               );
@@ -196,13 +196,13 @@ export default function DepartureBoard({
                   <div className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-12 bg-gray-800 rounded ml-auto"></div>
                 </td>
                 <td className={commonPadding}>
-                  <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
+                  <div className="w-24 h-6 sm:w-32 sm:h-8 md:w-40 md:h-10 lg:w-48 lg:h-12 bg-gray-800 rounded"></div>
                 </td>
                 <td className={commonPadding}>
                   <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded"></div>
                 </td>
                 <td className={commonPadding}>
-                  <div className="w-24 h-6 sm:w-32 sm:h-8 md:w-40 md:h-10 lg:w-48 lg:h-12 bg-gray-800 rounded"></div>
+                  <div className="w-16 h-6 sm:w-20 sm:h-8 md:w-24 md:h-10 lg:w-28 lg:h-12 bg-gray-800 rounded ml-auto"></div>
                 </td>
               </tr>
             ))}
