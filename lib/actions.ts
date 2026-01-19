@@ -30,12 +30,12 @@ export async function fetchDepartures() {
         const response = await fetch(
           `${RESROBOT_API_BASE_URL}?id=${id}&format=json&accessId=${RESROBOT_ACCESS_ID}&duration=${API_DURATION}`,
           {
-            cache: "no-store",
-          }
+            next: { revalidate: 600 },
+          },
         );
         if (!response.ok) {
           console.error(
-            `Failed to fetch departures for station ${station.name}`
+            `Failed to fetch departures for station ${station.name}`,
           );
           return [];
         }
@@ -44,7 +44,7 @@ export async function fetchDepartures() {
         const departures: ApiDeparture[] = data.Departure || [];
 
         const departureConfigMap = new Map(
-          station.departures.map((d) => [d.line, d])
+          station.departures.map((d) => [d.line, d]),
         );
 
         const processedDepartures = departures
@@ -54,7 +54,7 @@ export async function fetchDepartures() {
               .slice(0, 2)
               .join(":");
             const match = departure.name.match(
-              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*(\d+[A-Z]?)\b/i
+              /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*(\d+[A-Z]?)\b/i,
             );
             const timeDifference = formatTimeDifference(departure.time);
 
@@ -97,7 +97,9 @@ export async function fetchDepartures() {
 
             if (config.directions) {
               const directionMatches = config.directions.some((filter) =>
-                departure.direction.toLowerCase().includes(filter.toLowerCase())
+                departure.direction
+                  .toLowerCase()
+                  .includes(filter.toLowerCase()),
               );
               if (!directionMatches) return false;
             }
@@ -108,11 +110,11 @@ export async function fetchDepartures() {
       } catch (stationError) {
         console.error(
           `Error fetching departures for station ${station.id}:`,
-          stationError
+          stationError,
         );
         return [];
       }
-    })
+    }),
   );
 
   const newBusses: ProcessedDeparture[] = [];
@@ -128,7 +130,7 @@ export async function fetchDepartures() {
     }
   });
   const allDepartures = [...newBusses, ...newTrains].sort(
-    (a, b) => (a.timeLeft as number) - (b.timeLeft as number)
+    (a, b) => (a.timeLeft as number) - (b.timeLeft as number),
   );
 
   const departuresByLineAndDirection = new Map<string, ProcessedDeparture[]>();
@@ -143,7 +145,7 @@ export async function fetchDepartures() {
     const key = `${dep.name}|${dep.direction}`;
     const sameLine = departuresByLineAndDirection.get(key) || [];
     const currentIndex = sameLine.findIndex(
-      (d) => d.time === dep.time && d.station === dep.station
+      (d) => d.time === dep.time && d.station === dep.station,
     );
     const nextDep = sameLine[currentIndex + 1];
 
