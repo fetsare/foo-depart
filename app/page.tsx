@@ -2,8 +2,9 @@ import { Suspense } from "react";
 import DepartureBoard from "@/components/DepartureBoard";
 import { fetchDepartures } from "@/lib/actions";
 
-// Revalidate every 10 minutes - all users will share the same data
-// Client will refresh every 30 sec but with same data
+// Force dynamic rendering - no page-level caching
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   const initialDepartures = await fetchDepartures();
