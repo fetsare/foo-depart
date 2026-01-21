@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { type ProcessedDeparture } from "@/lib/types";
 import { formatMinutesToReadable } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Clock from "@/components/Clock";
 import Link from "next/link";
 
@@ -41,7 +40,6 @@ const getRowBackground = (index: number) =>
 const getLineColor = (lineType: string) =>
   lineColorMap[lineType] || "bg-gray-500";
 
-const getIcon = (lineType: string) => iconMap[lineType] || "/pendel.svg";
 
 export default function DepartureBoard({
   initialDepartures,

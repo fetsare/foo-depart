@@ -15,14 +15,18 @@ export default function Clock() {
     };
   }, []);
 
-  const formatTime = (value: number) => {
-    return value.toString().padStart(2, "0");
-  };
+  //enforce stockholm time
+  const stockholmTime = time.toLocaleString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
 
   return (
     <div className="absolute top-4 left-4 text-sm font-bold sm:text-base md:text-xl lg:text-2xl text-white">
-      {formatTime(time.getHours())}:{formatTime(time.getMinutes())}:
-      {formatTime(time.getSeconds())}
+      {stockholmTime}
     </div>
   );
 }

@@ -7,7 +7,7 @@ export const RESROBOT_ACCESS_ID = process.env.RESROBOT_ACCESS_ID || "";
 export const API_DURATION = parseInt(process.env.API_DURATION || "120", 10);
 
 export const DEFAULT_MIN_TIME_THRESHOLD = parseInt(
-  process.env.DEFAULT_MIN_TIME_THRESHOLD || "8",
+  process.env.DEFAULT_MIN_TIME_THRESHOLD || "7",
   10
 );
 
