@@ -58,9 +58,11 @@ export default function DepartureBoard({
 
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
   const lastUpdated = new Date().toLocaleTimeString("sv-SE", {
+    timeZone: "Europe/Stockholm",
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
+    hour12: false,
   });
   return (
     <main
