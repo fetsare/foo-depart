@@ -81,6 +81,7 @@ function processDepartures(rawData: { station: Station; departures: ApiDeparture
             timeLeft: timeDifference,
             direction: removeParentheses(departure.direction),
             station: stationName,
+            config: undefined,
           };
         }
 
@@ -91,10 +92,11 @@ function processDepartures(rawData: { station: Station; departures: ApiDeparture
           timeLeft: timeDifference,
           direction: removeParentheses(departure.direction),
           station: stationName,
+          config: departureConfigMap.get(match[2]),
         };
       })
       .filter((departure) => {
-        const config = departureConfigMap.get(departure.name);
+        const config = departure.config;
 
         if (!config) return false;
 
@@ -106,6 +108,7 @@ function processDepartures(rawData: { station: Station; departures: ApiDeparture
           return false;
         }
 
+        // Re-calculate time threshold on every load with fresh time
         const minTimeThreshold =
           config.minTimeThreshold ?? DEFAULT_MIN_TIME_THRESHOLD;
         if (departure.timeLeft <= minTimeThreshold) return false;
@@ -120,7 +123,8 @@ function processDepartures(rawData: { station: Station; departures: ApiDeparture
         }
 
         return true;
-      });
+      })
+      .map(({ config, ...rest }) => rest); // Remove config before returning
 
     allProcessedDepartures.push(...processedDepartures);
   });
