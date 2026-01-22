@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { type ProcessedDeparture } from "@/lib/types";
+import { ApiDeparture, Station } from "@/lib/types";
 import { formatMinutesToReadable } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import Clock from "@/components/Clock";
 import Link from "next/link";
+import { processDepartures } from "@/lib/utils";
 
 interface DepartureBoardProps {
-  initialDepartures: ProcessedDeparture[];
+  rawDepartures: {
+    station: Station;
+    departures: ApiDeparture[];
+  }[];
 }
 
 const iconMap: Record<string, string> = {
@@ -40,14 +44,13 @@ const getRowBackground = (index: number) =>
 const getLineColor = (lineType: string) =>
   lineColorMap[lineType] || "bg-gray-500";
 
-
-export default function DepartureBoard({
-  initialDepartures,
-}: DepartureBoardProps) {
+export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const hideContact = searchParams.has("hideContact");
+  const initialDepartures = processDepartures(rawDepartures);
 
+  // refresh the frontend every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       router.refresh();
@@ -59,9 +62,6 @@ export default function DepartureBoard({
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
   const lastUpdated = new Date().toLocaleTimeString("sv-SE", {
     timeZone: "Europe/Stockholm",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
     hour12: false,
   });
   return (
