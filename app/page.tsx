@@ -4,7 +4,7 @@ import { fetchDepartures } from "@/lib/actions";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Force dynamic rendering - no page-level caching
-//export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 //export const revalidate = 0;
 
 export default async function Home() {
