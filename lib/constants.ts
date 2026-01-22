@@ -7,22 +7,22 @@ export const RESROBOT_ACCESS_ID = process.env.RESROBOT_ACCESS_ID || "";
 export const API_DURATION = parseInt(process.env.API_DURATION || "120", 10);
 
 export const DEFAULT_MIN_TIME_THRESHOLD = parseInt(
-  process.env.DEFAULT_MIN_TIME_THRESHOLD || "7",
+  process.env.NEXT_PUBLIC_DEFAULT_MIN_TIME_THRESHOLD || "7",
   10
 );
 
 export const MAX_DEPARTURES_TO_DISPLAY = parseInt(
-  process.env.MAX_DEPARTURES_TO_DISPLAY || "10",
+  process.env.NEXT_PUBLIC_MAX_DEPARTURES_TO_DISPLAY || "10",
   10
 );
 
 export const DRÄGG_START_HOUR = parseInt(
-  process.env.EARLY_MORNING_START_HOUR || "0",
+  process.env.NEXT_PUBLIC_EARLY_MORNING_START_HOUR || "0",
   10
 );
 
 export const DRÄGG_END_HOUR = parseInt(
-  process.env.EARLY_MORNING_END_HOUR || "3",
+  process.env.NEXT_PUBLIC_EARLY_MORNING_END_HOUR || "3",
   10
 );
 
