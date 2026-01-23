@@ -1,10 +1,7 @@
 "use server";
 
 import data from "@/lib/departures.json";
-import {
-  type Station,
-  type ApiDeparture,
-} from "@/lib/types";
+import { type Station, type ApiDeparture } from "@/lib/types";
 import {
   RESROBOT_API_BASE_URL,
   RESROBOT_ACCESS_ID,
@@ -15,15 +12,26 @@ const { stations } = data as { stations: Station[] };
 
 // function with cached api call, makes sure we dont overuse api quota
 export async function fetchRawDepartures() {
+  const fetchStartTime = Date.now();
+
   const allResults = await Promise.all(
     stations.map(async (station) => {
       try {
+        const fetchTime = Date.now();
         const response = await fetch(
           `${RESROBOT_API_BASE_URL}?id=${station.id}&format=json&accessId=${RESROBOT_ACCESS_ID}&duration=${API_DURATION}`,
           {
             next: { revalidate: 600 },
           },
         );
+        const responseTime = Date.now() - fetchTime;
+
+        // this is not guarantee but its something
+        const isCached = responseTime < 10;
+        console.log(
+          `[${station.name}] ${isCached ? "CACHE HIT" : "CACHE MISS"} (${responseTime}ms)`,
+        );
+
         if (!response.ok) {
           console.error(
             `Failed to fetch departures for station ${station.name}`,
@@ -44,5 +52,6 @@ export async function fetchRawDepartures() {
     }),
   );
 
+  console.log(`Total fetch time: ${Date.now() - fetchStartTime}ms`);
   return allResults;
 }
