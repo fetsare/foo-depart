@@ -21,7 +21,10 @@
     {
       "name": "Kista alléväg",
       "id": 740016366,
-      "departures": [{ "line": "514X", "minTimeThreshold": 1 }]
+      "departures": [
+        { "line": "514X", "minTimeThreshold": 1 },
+        { "line": "514", "minTimeThreshold": 1 }
+      ]
     }
   ]
 }
