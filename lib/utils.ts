@@ -13,13 +13,13 @@ export const getAdjustedStockholmTime = (): Date => {
 
   //const currentHour = nowInSweden.getHours();
 
- // if (currentHour >= DRÄGG_START_HOUR && currentHour <= DRÄGG_END_HOUR) {
+  // if (currentHour >= DRÄGG_START_HOUR && currentHour <= DRÄGG_END_HOUR) {
   //  const minutesToSubtract = currentHour + 1;
-    //const adjustedTime = new Date(
-     // nowInSweden.getTime() - minutesToSubtract * 60 * 1000,
- //   );
+  //const adjustedTime = new Date(
+  // nowInSweden.getTime() - minutesToSubtract * 60 * 1000,
+  //   );
   //  return adjustedTime;
-//  }
+  //  }
 
   return nowInSweden;
 };

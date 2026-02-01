@@ -57,7 +57,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
     }, REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [router]);
+  }, []);
 
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
   const lastUpdated = new Date().toLocaleTimeString("sv-SE", {
