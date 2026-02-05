@@ -16,7 +16,7 @@
     {
       "name": "Helenelund",
       "id": 740000701,
-      "departures": [{ "line": "41" }]
+      "departures": [{ "line": "41", "minTimeThreshold": 14 }]
     },
     {
       "name": "Kista alléväg",

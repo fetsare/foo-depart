@@ -70,7 +70,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         hideContact && "cursor-none"
       } min-h-screen bg-black text-white p-4 relative`}
     >
-      {!hideContact ? (
+      {/* {!hideContact ? (
         <Link
           href={"/contact"}
           className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline"
@@ -79,15 +79,15 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         </Link>
       ) : (
         <Clock />
-      )}
-      <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
+      )} */}
+      <div className="absolute bottom-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
         Ugla
       </div>
-      <div className="flex justify-center gap-10 items-center ">
+      {/* <div className="flex justify-center gap-10 items-center ">
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
           Last updated: {lastUpdated}
         </p>
-      </div>
+      </div> */}
 
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-y-0 sm:border-spacing-y-0.5 md:border-spacing-y-1">
