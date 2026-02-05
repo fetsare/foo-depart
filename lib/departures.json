@@ -5,7 +5,7 @@
       "id": 740012883,
       "departures": [
         { "line": "179" },
-        { "line": "11" },
+        { "line": "11", "directions": ["Kungsträdgården"], "prioritized": true },
         { "line": "178" },
         { "line": "197" },
         { "line": "612" },

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "11",
+    "transportType": "Tunnelbana"
+  },
+  {
+    "name": "178",
+    "transportType": "Buss"
+  },
+  {
+    "name": "179",
+    "transportType": "Buss"
+  },
+  {
+    "name": "41",
+    "transportType": "Tåg"
+  },
+  {
+    "name": "514",
+    "transportType": "Buss"
+  },
+  {
+    "name": "612",
+    "transportType": "Buss"
+  },
+  {
+    "name": "685",
+    "transportType": "Buss"
+  },
+  {
+    "name": "687",
+    "transportType": "Buss"
+  }
+]

@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { ApiDeparture, Station } from "@/lib/types";
 import { formatMinutesToReadable } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import Clock from "@/components/Clock";
-import Link from "next/link";
+// import Clock from "@/components/Clock";
+// import Link from "next/link";
 import { processDepartures } from "@/lib/utils";
 
 interface DepartureBoardProps {
@@ -34,7 +34,7 @@ const MIN_ROWS = 5;
 const commonPadding =
   "px-1 sm:px-2 md:px-4 lg:px-6 py-3 sm:py-4 md:py-6 lg:py-8 2xl:px-8 2xl:py-10";
 const headerPadding =
-  "px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 md:py-3 lg:py-4 2xl:px-5 2xl:py-5";
+  "px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1 md:py-3 lg:py-2 2xl:px-5 2xl:py-2";
 const headerTextSize =
   "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 const cellTextSize =
@@ -66,6 +66,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
     timeZone: "Europe/Stockholm",
     hour12: false,
   });
+
   return (
     <main
       className={`${
@@ -82,9 +83,6 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
       ) : (
         <Clock />
       )} */}
-      <div className="absolute bottom-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
-        Ugla
-      </div>
       {/* <div className="flex justify-center gap-10 items-center ">
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
           Last updated: {lastUpdated}

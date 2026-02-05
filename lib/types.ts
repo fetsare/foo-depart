@@ -2,6 +2,7 @@ export interface DepartureConfig {
   line: string;
   directions?: string[];
   minTimeThreshold?: number;
+  prioritized?: boolean;
 }
 
 export interface Station {
@@ -18,6 +19,7 @@ export interface ProcessedDeparture {
   direction: string;
   station: string;
   nextDepartureTimeLeft?: number;
+  prioritized?: boolean;
 }
 
 export interface ApiDeparture {
