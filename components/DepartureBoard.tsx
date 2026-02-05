@@ -32,7 +32,7 @@ const REFRESH_INTERVAL = 30000;
 const MIN_ROWS = 5;
 
 const commonPadding =
-  "px-1 sm:px-2 md:px-4 lg:px-6 py-0.5 sm:py-1 md:py-2 2xl:px-8 2xl:py-2";
+  "px-1 sm:px-2 md:px-4 lg:px-6 py-3 sm:py-4 md:py-6 lg:py-8 2xl:px-8 2xl:py-10";
 const headerTextSize =
   "text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl";
 const cellTextSize =
