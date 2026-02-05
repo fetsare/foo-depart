@@ -1,7 +1,7 @@
 {
   "stations": [
     {
-      "name": "Kista Centrum",
+      "name": "Kista",
       "id": 740012883,
       "departures": [
         { "line": "179" },
