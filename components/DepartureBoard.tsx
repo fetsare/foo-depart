@@ -33,10 +33,12 @@ const MIN_ROWS = 5;
 
 const commonPadding =
   "px-1 sm:px-2 md:px-4 lg:px-6 py-3 sm:py-4 md:py-6 lg:py-8 2xl:px-8 2xl:py-10";
+const headerPadding =
+  "px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-2 md:py-3 lg:py-4 2xl:px-5 2xl:py-5";
 const headerTextSize =
-  "text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl";
+  "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 const cellTextSize =
-  "text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl";
+  "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 
 const getRowBackground = (index: number) =>
   index % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]";
@@ -68,7 +70,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
     <main
       className={`${
         hideContact && "cursor-none"
-      } min-h-screen bg-black text-white p-4 relative`}
+      } min-h-screen bg-black text-white relative`}
     >
       {/* {!hideContact ? (
         <Link
@@ -93,29 +95,29 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         <table className="w-full border-separate border-spacing-y-0 sm:border-spacing-y-0.5 md:border-spacing-y-1">
           <thead>
             <tr className="text-white">
-              {/* <th className={`${commonPadding} text-left`}></th> */}
+              {/* <th className={`${headerPadding} text-left`}></th> */}
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize}`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize}`}
               >
                 Line
               </th>
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Departs
               </th>
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Time
               </th>
               <th
-                className={`${commonPadding} text-left w-full ${headerTextSize}`}
+                className={`${headerPadding} text-left w-full ${headerTextSize}`}
               >
                 Station
               </th>
               <th
-                className={`${commonPadding} text-right whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-right whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Next
               </th>
