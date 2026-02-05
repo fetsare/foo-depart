@@ -61,7 +61,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
 
   const metro11Departures = initialDepartures.filter((d) => d.name === "11");
   
-  //Check if next 11 is < 30 min AND the one after is either non-existent or > 2 hours, this determines if we should warn foo bar
+  //check if next 11 is < 30 min AND the one after is either non-existent or > 2 hours, this determines if we should warn foo bar
   const nextMetro11 = metro11Departures[0];
   const shouldShowWarning = 
     nextMetro11 &&
@@ -79,7 +79,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
           isUrgentDeparture={!!shouldShowWarning}
-          urgentDepartureTime={nextMetro11?.timeLeft as number}
+          urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
         />
       )}
 
