@@ -27,10 +27,10 @@ export async function fetchRawDepartures() {
         const responseTime = Date.now() - fetchTime;
 
         // this is not guarantee but its something
-        const isCached = responseTime < 10;
-        console.log(
-          `[${station.name}] ${isCached ? "CACHE HIT" : "CACHE MISS"} (${responseTime}ms)`,
-        );
+        // const isCached = responseTime < 10;
+        // console.log(
+        //   `[${station.name}] ${isCached ? "CACHE HIT" : "CACHE MISS"} (${responseTime}ms)`,
+        // );
 
         if (!response.ok) {
           console.error(

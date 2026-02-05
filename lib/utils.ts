@@ -50,7 +50,7 @@ export const formatTimeDifference = (
     return "Departed";
   }
 
-  const differenceInMin = Math.floor(differenceInMs / 1000 / 60);
+  const differenceInMin = Math.ceil(differenceInMs / 1000 / 60);
 
   return differenceInMin;
 };
