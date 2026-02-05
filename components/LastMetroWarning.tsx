@@ -1,12 +1,10 @@
 import Image from "next/image";
 
 interface LastMetroWarningProps {
-  isUrgentDeparture: boolean;
   urgentDepartureTime?: number;
 }
 
 export default function LastMetroWarning({
-  isUrgentDeparture,
   urgentDepartureTime,
 }: LastMetroWarningProps) {
   return (

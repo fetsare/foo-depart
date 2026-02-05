@@ -78,7 +78,6 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
     >
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
-          isUrgentDeparture={!!shouldShowWarning}
           urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
         />
       )}
