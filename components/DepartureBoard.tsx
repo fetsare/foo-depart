@@ -67,12 +67,40 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
     hour12: false,
   });
 
+  const metro11Departures = initialDepartures.filter((d) => d.name === "11");
+  const lastMetro11 = metro11Departures.find(
+    (d) => !d.nextDepartureTimeLeft && typeof d.timeLeft === "number",
+  );
+
+  const showLastMetroWarning =
+    lastMetro11 &&
+    typeof lastMetro11.timeLeft === "number" &&
+    lastMetro11.timeLeft <= 30;
+
   return (
     <main
       className={`${
         hideContact && "cursor-none"
       } min-h-screen bg-black text-white relative`}
     >
+      {showLastMetroWarning && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+          style={{ animation: "custom-pulse 8s ease-in-out infinite" }}
+        >
+          <div className="bg-red-600 border-8 border-red-800 rounded-3xl p-8 md:p-16 lg:p-24 shadow-2xl">
+            <div className="text-center">
+              <p className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-white mb-4 md:mb-8">
+                ⚠️ LAST METRO ⚠️
+              </p>
+              <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white">
+                Departing in {metro11Departures[0]?.timeLeft} min
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* {!hideContact ? (
         <Link
           href={"/contact"}
