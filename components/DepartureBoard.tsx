@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 // import Clock from "@/components/Clock";
 // import Link from "next/link";
 import { processDepartures } from "@/lib/utils";
+import LastMetroWarning from "./LastMetroWarning";
 
 interface DepartureBoardProps {
   rawDepartures: {
@@ -14,12 +15,6 @@ interface DepartureBoardProps {
     departures: ApiDeparture[];
   }[];
 }
-
-const iconMap: Record<string, string> = {
-  Tåg: "/pendel.svg",
-  Buss: "/buss.svg",
-  Tunnelbana: "/tunnelbana.svg",
-};
 
 const lineColorMap: Record<string, string> = {
   Tåg: "bg-[#ec619f]",
@@ -32,7 +27,7 @@ const REFRESH_INTERVAL = 30000;
 const MIN_ROWS = 5;
 
 const commonPadding =
-  "px-1 sm:px-2 md:px-4 lg:px-6 py-3 sm:py-4 md:py-6 lg:py-8 2xl:px-8 2xl:py-10";
+  "px-1 sm:px-2 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 lg:py-6 2xl:px-8 2xl:py-6";
 const headerPadding =
   "px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1 md:py-3 lg:py-2 2xl:px-5 2xl:py-2";
 const headerTextSize =
@@ -50,6 +45,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const hideContact = searchParams.has("hideContact");
+  const testWarning = searchParams.has("testWarning");
   const initialDepartures = processDepartures(rawDepartures);
 
   // refresh the frontend every 30 seconds
@@ -62,20 +58,17 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   }, [router]);
 
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
-  const lastUpdated = new Date().toLocaleTimeString("sv-SE", {
-    timeZone: "Europe/Stockholm",
-    hour12: false,
-  });
 
   const metro11Departures = initialDepartures.filter((d) => d.name === "11");
-  const lastMetro11 = metro11Departures.find(
-    (d) => !d.nextDepartureTimeLeft && typeof d.timeLeft === "number",
-  );
-
-  const showLastMetroWarning =
-    lastMetro11 &&
-    typeof lastMetro11.timeLeft === "number" &&
-    lastMetro11.timeLeft <= 30;
+  
+  //Check if next 11 is < 30 min AND the one after is either non-existent or > 2 hours, this determines if we should warn foo bar
+  const nextMetro11 = metro11Departures[0];
+  const shouldShowWarning = 
+    nextMetro11 &&
+    typeof nextMetro11.timeLeft === "number" &&
+    nextMetro11.timeLeft < 30 &&
+    (!nextMetro11.nextDepartureTimeLeft || 
+     (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
 
   return (
     <main
@@ -83,23 +76,11 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         hideContact && "cursor-none"
       } min-h-screen bg-black text-white relative`}
     >
-      
-      {showLastMetroWarning && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-          style={{ animation: "custom-pulse 8s ease-in-out infinite" }}
-        >
-          <div className="bg-red-600 border-8 border-red-800 rounded-3xl p-8 md:p-16 lg:p-24 shadow-2xl">
-            <div className="text-center">
-              <p className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold text-white mb-4 md:mb-8">
-                ⚠️ LAST METRO ⚠️
-              </p>
-              <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white">
-                Departing in {metro11Departures[0]?.timeLeft} min
-              </p>
-            </div>
-          </div>
-        </div>
+      {(shouldShowWarning || testWarning) && (
+        <LastMetroWarning
+          isUrgentDeparture={!!shouldShowWarning}
+          urgentDepartureTime={nextMetro11?.timeLeft as number}
+        />
       )}
 
       {/* {!hideContact ? (

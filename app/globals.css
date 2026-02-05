@@ -22,22 +22,22 @@ body {
   0% {
     opacity: 0;
   }
-  10% {
+  5% {
     opacity: 1;
+  }
+  15% {
+    opacity: 0;
   }
   25% {
-    opacity: 0;
-  }
-  40% {
     opacity: 1;
   }
-  50% {
+  35% {
     opacity: 0;
   }
-  65% {
+  45% {
     opacity: 1;
   }
-  75% {
+  55% {
     opacity: 0;
   }
   100% {
