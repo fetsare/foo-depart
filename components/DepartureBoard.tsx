@@ -83,6 +83,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         hideContact && "cursor-none"
       } min-h-screen bg-black text-white relative`}
     >
+      
       {showLastMetroWarning && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
@@ -116,7 +117,6 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
           Last updated: {lastUpdated}
         </p>
       </div> */}
-
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-y-0 sm:border-spacing-y-0.5 md:border-spacing-y-1">
           <thead>
