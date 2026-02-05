@@ -153,7 +153,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
                     <span
                       className={`${getLineColor(
                         lineType,
-                      )} rounded-lg sm:rounded-xl px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 2xl:px-4 2xl:py-2 2xl:rounded-2xl font-bold ${cellTextSize} inline-block`}
+                      )} rounded-lg sm:rounded-xl px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 2xl:px- 2xl:py-2 2xl:rounded-2xl font-bold ${cellTextSize} inline-block`}
                     >
                       {departure.name}
                     </span>
