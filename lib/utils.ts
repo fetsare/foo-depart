@@ -63,10 +63,17 @@ export const formatMinutesToReadable = (minutes: number | string): string => {
   if (typeof minutes !== "number") {
     return String(minutes);
   }
+  // For 60+ minutes: round minutes then show whole hours or .5 when remainder >= 30
   if (minutes >= 60) {
-    const hours = Math.floor(minutes / 60);
-    return `${hours} h`;
+    const total = Math.round(minutes);
+    const wholeHours = Math.floor(total / 60);
+    const remainder = total % 60;
+    const hasHalf = remainder >= 30;
+    const display = hasHalf ? `${wholeHours}.5` : `${wholeHours}`;
+    return `${display} h`;
   }
+
+  // Keep values under 60 unchanged
   return `${minutes} min`;
 };
 
