@@ -108,6 +108,7 @@ export function processDepartures(
           };
         }
 
+        const config = departureConfigMap.get(match[2]);
         return {
           name: match[2],
           transportType: match[1],
@@ -115,7 +116,8 @@ export function processDepartures(
           timeLeft: timeDifference,
           direction: removeParentheses(departure.direction),
           station: stationName,
-          config: departureConfigMap.get(match[2]),
+          config: config,
+          prioritized: config?.prioritized || false,
         };
       })
       .filter((departure) => {
@@ -143,14 +145,25 @@ export function processDepartures(
 
         return true;
       })
-      .map(({ config, ...rest }) => rest); // Remove config before returning
+      .map(({ config, ...rest }) => rest); // Remove config but keep prioritized
 
     allProcessedDepartures.push(...processedDepartures);
   });
 
-  const allDepartures = allProcessedDepartures.sort(
-    (a, b) => (a.timeLeft as number) - (b.timeLeft as number),
+  // First, sort all departures by time
+  const sortedByTime = allProcessedDepartures.sort(
+    (a, b) => (a.timeLeft as number) - (b.timeLeft as number)
   );
+
+  // Find the soonest prioritized departure
+  const soonestPrio = sortedByTime.find((d) => d.prioritized);
+
+  // If there's a prioritized departure, move it to the front
+  let allDepartures = sortedByTime;
+  if (soonestPrio) {
+    const filtered = sortedByTime.filter((d) => d !== soonestPrio);
+    allDepartures = [soonestPrio, ...filtered];
+  }
 
   const departuresByLineAndDirection = new Map<string, ProcessedDeparture[]>();
   allDepartures.forEach((dep) => {

@@ -4,9 +4,10 @@ import { useEffect } from "react";
 import { ApiDeparture, Station } from "@/lib/types";
 import { formatMinutesToReadable } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import Clock from "@/components/Clock";
-import Link from "next/link";
+// import Clock from "@/components/Clock";
+// import Link from "next/link";
 import { processDepartures } from "@/lib/utils";
+import LastMetroWarning from "./LastMetroWarning";
 
 interface DepartureBoardProps {
   rawDepartures: {
@@ -14,12 +15,6 @@ interface DepartureBoardProps {
     departures: ApiDeparture[];
   }[];
 }
-
-const iconMap: Record<string, string> = {
-  Tåg: "/pendel.svg",
-  Buss: "/buss.svg",
-  Tunnelbana: "/tunnelbana.svg",
-};
 
 const lineColorMap: Record<string, string> = {
   Tåg: "bg-[#ec619f]",
@@ -32,11 +27,13 @@ const REFRESH_INTERVAL = 30000;
 const MIN_ROWS = 5;
 
 const commonPadding =
-  "px-1 sm:px-2 md:px-4 lg:px-6 py-3 sm:py-4 md:py-6 lg:py-8 2xl:px-8 2xl:py-10";
+  "px-1 sm:px-2 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 lg:py-6 2xl:px-8 2xl:py-6";
+const headerPadding =
+  "px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1 md:py-3 lg:py-2 2xl:px-5 2xl:py-2";
 const headerTextSize =
-  "text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl";
+  "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 const cellTextSize =
-  "text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl";
+  "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 
 const getRowBackground = (index: number) =>
   index % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]";
@@ -48,6 +45,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const hideContact = searchParams.has("hideContact");
+  const testWarning = searchParams.has("testWarning");
   const initialDepartures = processDepartures(rawDepartures);
 
   // refresh the frontend every 30 seconds
@@ -60,17 +58,31 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   }, [router]);
 
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
-  const lastUpdated = new Date().toLocaleTimeString("sv-SE", {
-    timeZone: "Europe/Stockholm",
-    hour12: false,
-  });
+
+  const metro11Departures = initialDepartures.filter((d) => d.name === "11");
+  
+  //check if next 11 is < 30 min AND the one after is either non-existent or > 2 hours, this determines if we should warn foo bar
+  const nextMetro11 = metro11Departures[0];
+  const shouldShowWarning = 
+    nextMetro11 &&
+    typeof nextMetro11.timeLeft === "number" &&
+    nextMetro11.timeLeft < 30 &&
+    (!nextMetro11.nextDepartureTimeLeft || 
+     (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
+
   return (
     <main
       className={`${
         hideContact && "cursor-none"
-      } min-h-screen bg-black text-white p-4 relative`}
+      } min-h-screen bg-black text-white relative`}
     >
-      {!hideContact ? (
+      {(shouldShowWarning || testWarning) && (
+        <LastMetroWarning
+          urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
+        />
+      )}
+
+      {/* {!hideContact ? (
         <Link
           href={"/contact"}
           className="absolute top-4 left-4 text-sm sm:text-base md:text-lg lg:text-xl text-blue-400 focus:text-blue-500 hover:cursor-pointer hover:underline"
@@ -79,43 +91,39 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
         </Link>
       ) : (
         <Clock />
-      )}
-      <div className="absolute top-4 right-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
-        Ugla
-      </div>
-      <div className="flex justify-center gap-10 items-center ">
+      )} */}
+      {/* <div className="flex justify-center gap-10 items-center ">
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400">
           Last updated: {lastUpdated}
         </p>
-      </div>
-
+      </div> */}
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-y-0 sm:border-spacing-y-0.5 md:border-spacing-y-1">
           <thead>
             <tr className="text-white">
-              {/* <th className={`${commonPadding} text-left`}></th> */}
+              {/* <th className={`${headerPadding} text-left`}></th> */}
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize}`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize}`}
               >
                 Line
               </th>
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Departs
               </th>
               <th
-                className={`${commonPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Time
               </th>
               <th
-                className={`${commonPadding} text-left w-full ${headerTextSize}`}
+                className={`${headerPadding} text-left w-full ${headerTextSize}`}
               >
                 Station
               </th>
               <th
-                className={`${commonPadding} text-right whitespace-nowrap ${headerTextSize} text-orange-500`}
+                className={`${headerPadding} text-right whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
                 Next
               </th>
@@ -145,7 +153,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
                     <span
                       className={`${getLineColor(
                         lineType,
-                      )} rounded-lg sm:rounded-xl px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 2xl:px-4 2xl:py-2 2xl:rounded-2xl font-bold ${cellTextSize} inline-block`}
+                      )} rounded-lg sm:rounded-xl px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 2xl:px- 2xl:py-2 2xl:rounded-2xl font-bold ${cellTextSize} inline-block`}
                     >
                       {departure.name}
                     </span>
