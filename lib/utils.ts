@@ -65,11 +65,7 @@ export const formatMinutesToReadable = (minutes: number | string): string => {
   }
   if (minutes >= 60) {
     const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    if (remainingMinutes === 0) {
-      return `${hours} h`;
-    }
-    return `${hours} h, ${remainingMinutes} min`;
+    return `${hours} h`;
   }
   return `${minutes} min`;
 };
