@@ -45,6 +45,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const testWarning = searchParams.has("testWarning");
+  const hideContact = searchParams.has("hideContact");
   const initialDepartures = processDepartures(rawDepartures);
 
   // refresh the frontend every 30 seconds
@@ -70,7 +71,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
      (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
 
   return (
-    <main className="min-h-screen bg-black text-white relative">
+    <main className={`min-h-screen bg-black text-white relative ${hideContact ? "cursor-none" : ""}`}>
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
           urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
