@@ -16,16 +16,6 @@ export const MAX_DEPARTURES_TO_DISPLAY = parseInt(
   10
 );
 
-export const DRÄGG_START_HOUR = parseInt(
-  process.env.NEXT_PUBLIC_EARLY_MORNING_START_HOUR || "0",
-  10
-);
-
-export const DRÄGG_END_HOUR = parseInt(
-  process.env.NEXT_PUBLIC_EARLY_MORNING_END_HOUR || "3",
-  10
-);
-
 export const validateConfig = () => {
   // required env variables
   if (!RESROBOT_ACCESS_ID) {
