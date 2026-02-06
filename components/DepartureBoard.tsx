@@ -44,7 +44,6 @@ const getLineColor = (lineType: string) =>
 export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const hideContact = searchParams.has("hideContact");
   const testWarning = searchParams.has("testWarning");
   const initialDepartures = processDepartures(rawDepartures);
 
@@ -71,11 +70,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
      (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
 
   return (
-    <main
-      className={`${
-        hideContact && "cursor-none"
-      } min-h-screen bg-black text-white relative`}
-    >
+    <main className="min-h-screen bg-black text-white relative">
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
           urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
