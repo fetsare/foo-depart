@@ -8,7 +8,32 @@ export default function WalkingRazor() {
   const [position, setPosition] = useState({ x: -150, y: 50 });
   const [direction, setDirection] = useState<"left" | "right">("right");
 
+  const triggerWalk = () => {
+    const randomY = Math.random() * 60 + 10;
+    const newDirection = Math.random() > 0.5 ? "right" : "left";
+    setDirection(newDirection);
+    setPosition({
+      x: newDirection === "right" ? -150 : window.innerWidth + 50,
+      y: randomY,
+    });
+    setIsVisible(true);
+
+    setTimeout(() => {
+      setIsVisible(false);
+    }, 15000);
+  };
+
   useEffect(() => {
+    // Test mode - trigger on Ctrl/Cmd + K
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        triggerWalk();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
     // Random delay between 30 seconds to 3 minutes before first appearance
     const initialDelay = Math.random() * (180000 - 30000) + 30000;
 
@@ -17,44 +42,20 @@ export default function WalkingRazor() {
       const delay = Math.random() * (300000 - 120000) + 120000;
 
       setTimeout(() => {
-        // Random vertical position (between 10% and 70% of viewport height)
-        const randomY = Math.random() * 60 + 10;
-
-        // Random direction
-        const newDirection = Math.random() > 0.5 ? "right" : "left";
-        setDirection(newDirection);
-
-        // Start position off-screen
-        setPosition({
-          x: newDirection === "right" ? -150 : window.innerWidth + 50,
-          y: randomY,
-        });
-
-        setIsVisible(true);
-
-        // Hide after animation completes (about 15 seconds)
-        setTimeout(() => {
-          setIsVisible(false);
-          scheduleNextAppearance();
-        }, 15000);
+        triggerWalk();
+        scheduleNextAppearance();
       }, delay);
     };
 
     // Initial appearance
     setTimeout(() => {
-      const newDirection = Math.random() > 0.5 ? "right" : "left";
-      setDirection(newDirection);
-      setPosition({
-        x: newDirection === "right" ? -150 : window.innerWidth + 50,
-        y: Math.random() * 60 + 10,
-      });
-      setIsVisible(true);
-
-      setTimeout(() => {
-        setIsVisible(false);
-        scheduleNextAppearance();
-      }, 15000);
+      triggerWalk();
+      scheduleNextAppearance();
     }, initialDelay);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   if (!isVisible) return null;
@@ -74,77 +75,33 @@ export default function WalkingRazor() {
         alt=""
         width={120}
         height={120}
-        className="animate-walk"
+        className="animate-spin"
         priority={false}
+        style={{ filter: "brightness(0) invert(1)" }}
       />
 
       <style jsx>{`
         .walking-razor {
-          animation: ${direction === "right" ? "walkRight" : "walkLeft"} 15s
+          animation: ${direction === "right" ? "walkRight" : "walkLeft"} 10s
             linear;
         }
 
         @keyframes walkRight {
           from {
-            transform: translateX(0) rotate(0deg);
-          }
-          25% {
-            transform: translateX(
-                ${typeof window !== "undefined" ? window.innerWidth / 4 : 400}px
-              )
-              rotate(-8deg);
-          }
-          50% {
-            transform: translateX(
-                ${typeof window !== "undefined" ? window.innerWidth / 2 : 800}px
-              )
-              rotate(8deg);
-          }
-          75% {
-            transform: translateX(
-                ${typeof window !== "undefined"
-                  ? (window.innerWidth * 3) / 4
-                  : 1200}px
-              )
-              rotate(-8deg);
+            transform: translateX(0);
           }
           to {
             transform: translateX(
                 ${typeof window !== "undefined"
                   ? window.innerWidth + 200
                   : 1600}px
-              )
-              rotate(0deg);
+              );
           }
         }
 
         @keyframes walkLeft {
           from {
-            transform: translateX(0) rotate(0deg) scaleX(-1);
-          }
-          25% {
-            transform: translateX(
-                -${typeof window !== "undefined"
-                    ? window.innerWidth / 4
-                    : 400}px
-              )
-              rotate(-8deg) scaleX(-1);
-          }
-          50% {
-            transform: translateX(
-                -${typeof window !== "undefined"
-                    ? window.innerWidth / 2
-                    : 800}px
-              )
-              rotate(8deg) scaleX(-1);
-          }
-          75% {
-            transform: translateX(
-                -${typeof window !== "undefined"
-                    ? (window.innerWidth * 3) / 4
-                    : 1200}px
-              )
-              rotate(-8deg) scaleX(-1);
+            transform: translateX(0) scaleX(-1);
           }
           to {
             transform: translateX(
@@ -152,33 +109,7 @@ export default function WalkingRazor() {
                     ? window.innerWidth + 200
                     : 1600}px
               )
-              rotate(0deg) scaleX(-1);
-          }
-        }
-
-        .animate-walk {
-          animation:
-            bobWalk 0.15s ease-in-out infinite,
-            sideToSide 0.3s ease-in-out infinite;
-        }
-
-        @keyframes bobWalk {
-          0%,
-          100% {
-            transform: translateY(0) scaleY(1);
-          }
-          50% {
-            transform: translateY(-10px) scaleY(0.95);
-          }
-        }
-
-        @keyframes sideToSide {
-          0%,
-          100% {
-            transform: translateX(-15px) rotate(-10deg);
-          }
-          50% {
-            transform: translateX(15px) rotate(10deg);
+              scaleX(-1);
           }
         }
       `}</style>
