@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Oxygen } from "next/font/google";
 import "./globals.css";
+import WalkingRazor from "@/components/WalkingRazor";
 
 const oxygen = Oxygen({
   weight: ["300", "400", "700"],
@@ -25,6 +26,7 @@ export default function RootLayout({
         style={{ fontFamily: 'var(--font-oxygen)' }}
       >
         {children}
+        <WalkingRazor />
       </body>
     </html>
   );

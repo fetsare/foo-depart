@@ -1,54 +1,38 @@
 import {
-  DRÄGG_START_HOUR,
-  DRÄGG_END_HOUR,
   DEFAULT_MIN_TIME_THRESHOLD,
   MAX_DEPARTURES_TO_DISPLAY,
 } from "@/lib/constants";
 import { ApiDeparture, ProcessedDeparture, Station } from "./types";
 
-export const getAdjustedStockholmTime = (): Date => {
-  const nowInSweden = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Europe/Stockholm" }),
-  );
-
-  //const currentHour = nowInSweden.getHours();
-
-  // if (currentHour >= DRÄGG_START_HOUR && currentHour <= DRÄGG_END_HOUR) {
-  //  const minutesToSubtract = currentHour + 1;
-  //const adjustedTime = new Date(
-  // nowInSweden.getTime() - minutesToSubtract * 60 * 1000,
-  //   );
-  //  return adjustedTime;
-  //  }
-
-  return nowInSweden;
+/**
+ * Get the current date/time in Stockholm timezone
+ * Since we are only using swedish trafic data we force all clients to Stockholm timezone
+ */
+export const getStockholmTime = (): Date => {
+  const stockholmTimeString = new Date().toLocaleString("sv-SE", {
+    timeZone: "Europe/Stockholm",
+  });
+  return new Date(stockholmTimeString);
 };
 
-export const formatTimeDifference = (
-  departureTime: string,
-): number | string => {
-  // Get adjusted time in Swedish timezone
-  const nowInSweden = getAdjustedStockholmTime();
+export const formatTimeDifference = (departureTime: string): number => {
+  const now = getStockholmTime();
 
   const [hours, minutes] = departureTime.split(":").map(Number);
 
   const departureDate = new Date(
-    nowInSweden.getFullYear(),
-    nowInSweden.getMonth(),
-    nowInSweden.getDate(),
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
     hours,
     minutes,
   );
 
-  if (departureDate < nowInSweden) {
+  if (departureDate < now) {
     departureDate.setDate(departureDate.getDate() + 1);
   }
 
-  const differenceInMs = departureDate.getTime() - nowInSweden.getTime();
-
-  if (differenceInMs < 0) {
-    return "Departed";
-  }
+  const differenceInMs = departureDate.getTime() - now.getTime();
 
   const differenceInMin = Math.ceil(differenceInMs / 1000 / 60);
 
@@ -63,14 +47,17 @@ export const formatMinutesToReadable = (minutes: number | string): string => {
   if (typeof minutes !== "number") {
     return String(minutes);
   }
+  // For 60+ minutes: round minutes then show whole hours or .5 when remainder >= 30
   if (minutes >= 60) {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    if (remainingMinutes === 0) {
-      return `${hours} h`;
-    }
-    return `${hours} h, ${remainingMinutes} min`;
+    const total = Math.round(minutes);
+    const wholeHours = Math.floor(total / 60);
+    const remainder = total % 60;
+    const hasHalf = remainder >= 30;
+    const display = hasHalf ? `${wholeHours}.5` : `${wholeHours}`;
+    return `${display} h`;
   }
+
+  // Keep values under 60 unchanged
   return `${minutes} min`;
 };
 
@@ -127,7 +114,7 @@ export function processDepartures(
         if (
           departure.time === "Departed" ||
           departure.name === "Unknown" ||
-          typeof departure.timeLeft !== "number"
+          departure.timeLeft < 0
         ) {
           return false;
         }
@@ -152,7 +139,7 @@ export function processDepartures(
 
   // First, sort all departures by time
   const sortedByTime = allProcessedDepartures.sort(
-    (a, b) => (a.timeLeft as number) - (b.timeLeft as number)
+    (a, b) => (a.timeLeft as number) - (b.timeLeft as number),
   );
 
   // Find the soonest prioritized departure
