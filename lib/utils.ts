@@ -179,5 +179,16 @@ export function processDepartures(
     };
   });
 
-  return departuresWithNext.slice(0, MAX_DEPARTURES_TO_DISPLAY);
+  // keep only the first occurrence of each line+direction combination but the next field will still show
+  const seen = new Set<string>();
+  const uniqueDepartures = departuresWithNext.filter((dep) => {
+    const key = `${dep.name}|${dep.direction}`;
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+
+  return uniqueDepartures.slice(0, MAX_DEPARTURES_TO_DISPLAY);
 }
