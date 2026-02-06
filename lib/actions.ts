@@ -1,7 +1,7 @@
 "use server";
 
 import data from "@/lib/departures.json";
-import { type Station, type ApiDeparture } from "@/lib/types";
+import { type Station, type ApiDeparture, type GitHubContributor } from "@/lib/types";
 import {
   RESROBOT_API_BASE_URL,
   RESROBOT_ACCESS_ID,
@@ -54,4 +54,26 @@ export async function fetchRawDepartures() {
 
   console.log(`Total fetch time: ${Date.now() - fetchStartTime}ms`);
   return allResults;
+}
+
+export async function fetchContributors(): Promise<GitHubContributor[]> {
+  try {
+    const response = await fetch(
+      `${process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NEXT_PUBLIC_BASE_URL}/api/contributors`,
+      {
+        next: { revalidate: 3600 },
+      },
+    );
+
+    if (!response.ok) {
+      console.error("Failed to fetch contributors");
+      return [];
+    }
+
+    const contributors: GitHubContributor[] = await response.json();
+    return contributors;
+  } catch (error) {
+    console.error("Error fetching contributors:", error);
+    return [];
+  }
 }
