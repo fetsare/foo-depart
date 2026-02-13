@@ -113,7 +113,8 @@ ${description}
 
     await resend.emails.send({
       from: ADMIN_EMAIL,
-      to: [email, ADMIN_EMAIL],
+      to: [email],
+      bcc: [ADMIN_EMAIL],
       subject: "Your inquiry has been approved!",
       text: `
 Your inquiry was approved
