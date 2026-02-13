@@ -60,7 +60,7 @@ export async function fetchContributors(): Promise<GitHubContributor[]> {
   try {
     const baseUrl = process.env.NODE_ENV === "development" 
       ? "http://localhost:3000" 
-      : (process.env.NEXT_PUBLIC_BASE_URL || `https://${process.env.VERCEL_URL}`);
+      : (process.env.NEXT_PUBLIC_APP_URL || `https://${process.env.VERCEL_URL}`);
     
     const response = await fetch(
       `${baseUrl}/api/contributors`,
