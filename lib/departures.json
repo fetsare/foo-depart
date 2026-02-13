@@ -5,7 +5,11 @@
       "id": 740012883,
       "departures": [
         { "line": "179" },
-        { "line": "11", "directions": ["Kungsträdgården"], "prioritized": true },
+        {
+          "line": "11",
+          "prioritized": true,
+          "prioritizedDirections": ["Kungsträdgården"]
+        },
         { "line": "178" },
         { "line": "197" },
         { "line": "612" },
@@ -16,7 +20,10 @@
     {
       "name": "Helenelund",
       "id": 740000701,
-      "departures": [{ "line": "41", "minTimeThreshold": 14 }]
+      "departures": [
+        { "line": "41", "minTimeThreshold": 14 },
+        { "line": "40", "minTimeThreshold": 14, "prioritized": true, "prioritizedDirections": ["Uppsala"] }
+      ]
     },
     {
       "name": "Kista alléväg",
