@@ -3,6 +3,7 @@ export interface DepartureConfig {
   directions?: string[];
   minTimeThreshold?: number;
   prioritized?: boolean;
+  prioritizedDirections?: string[];
 }
 
 export interface Station {

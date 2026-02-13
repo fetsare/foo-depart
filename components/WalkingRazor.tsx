@@ -91,11 +91,7 @@ export default function WalkingRazor() {
             transform: translateX(0);
           }
           to {
-            transform: translateX(
-                ${typeof window !== "undefined"
-                  ? window.innerWidth + 200
-                  : 1600}px
-              );
+            transform: translateX(calc(100vw + 200px));
           }
         }
 
@@ -104,12 +100,7 @@ export default function WalkingRazor() {
             transform: translateX(0) scaleX(-1);
           }
           to {
-            transform: translateX(
-                -${typeof window !== "undefined"
-                    ? window.innerWidth + 200
-                    : 1600}px
-              )
-              scaleX(-1);
+            transform: translateX(calc(-100vw - 200px)) scaleX(-1);
           }
         }
       `}</style>
