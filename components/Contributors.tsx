@@ -39,6 +39,11 @@ export default async function Contributors() {
             alt="GitHub last commit"
             className="h-4"
           />
+          <img
+            src="https://img.shields.io/github/license/fetsare/foo-depart"
+            alt="GitHub license"
+            className="h-4"
+          />
         </div>
       </div>
     </div>
