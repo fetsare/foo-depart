@@ -81,14 +81,15 @@ export default function ContactForm() {
           Report missing bus or train information, suggest improvements, or
           share your feedback about the departure board. Once approved, an issue
           will be automatically created in the{" "}
-          <a 
-            href="https://github.com/fetsare/foo-depart" 
-            target="_blank" 
+          <a
+            href="https://github.com/fetsare/foo-depart"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-blue-400 hover:text-blue-300 underline hover:no-underline transition-colors"
           >
             GitHub repository
-          </a>.
+          </a>
+          .
         </p>
 
         {status === "success" && (
