@@ -10,9 +10,9 @@ export default function LastMetroWarning({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-      style={{ animation: "custom-pulse 20s ease-in-out infinite" }}
+      style={{ animation: "custom-pulse 10s ease-in-out infinite" }}
     >
-      <div className="bg-red-600 border-8 border-red-800 rounded-3xl p-8 md:p-16 lg:p-24 shadow-2xl">
+      <div className="w-screen h-screen flex items-center justify-center bg-red-600 border-8 border-red-800 rounded-3xl p-8 md:p-16 lg:p-24 shadow-2xl">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4 md:mb-8">
             <Image
