@@ -70,7 +70,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
      (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
 
   return (
-    <main className="min-h-screen bg-black text-white relative">
+    <main className="min-h-screen bg-black text-white relative cursor-none">
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
           urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
