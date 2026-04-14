@@ -42,3 +42,4 @@ jobs:
         with:
           name: lighthouse-raw
           path: .lighthouseci
+          if-no-files-found: ignore
