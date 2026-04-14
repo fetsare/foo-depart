@@ -30,7 +30,7 @@ export interface ApiDeparture {
 }
 
 // generated this from the api response
-export interface GitHubContributor { 
+export interface GitHubContributor {
   login: string;
   id: number;
   node_id: string;

@@ -1,21 +1,100 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ffffff;
+
+  --app-gray-soft: #d1d5db;
+  --app-gray-mid: #9ca3af;
+  --app-gray-border: #374151;
+  --app-gray-surface: #111827;
+  --app-gray-deep: #030712;
+
+  --app-blue-soft: #93c5fd;
+  --app-blue-main: #2563eb;
+  --app-blue-strong: #1d4ed8;
+  --app-blue-deep: #172554;
+
+  --app-red-soft: #fca5a5;
+  --app-red-main: #dc2626;
+  --app-red-strong: #b91c1c;
+  --app-red-surface: #7f1d1d;
+  --app-red-deep: #450a0a;
+
+  --app-orange-main: #f97316;
+
+  --app-green-soft: #bbf7d0;
+  --app-green-main: #4ade80;
+  --app-green-deep: #14532d;
+
+  --app-yellow-soft: #fef08a;
+  --app-yellow-main: #facc15;
+  --app-yellow-deep: #713f12;
+
+  /* Semantic board colors */
+  --app-line-train: #ec619f;
+  --app-line-metro: #007db8;
+  --app-line-tram: #b65f1f;
+  --app-board-row-odd: #0a0a0a;
+  --app-board-row-even: #141414;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-oxygen);
   --font-mono: var(--font-geist-mono);
+
+  --color-black: var(--background);
+  --color-white: var(--foreground);
+
+  --color-gray-200: var(--app-gray-soft);
+  --color-gray-300: var(--app-gray-soft);
+  --color-gray-400: var(--app-gray-mid);
+  --color-gray-500: var(--app-gray-mid);
+  --color-gray-600: var(--app-gray-border);
+  --color-gray-700: var(--app-gray-border);
+  --color-gray-800: var(--app-gray-surface);
+  --color-gray-900: var(--app-gray-surface);
+  --color-gray-950: var(--app-gray-deep);
+
+  --color-blue-300: var(--app-blue-soft);
+  --color-blue-400: var(--app-blue-soft);
+  --color-blue-500: var(--app-blue-main);
+  --color-blue-600: var(--app-blue-main);
+  --color-blue-700: var(--app-blue-strong);
+  --color-blue-950: var(--app-blue-deep);
+
+  --color-red-300: var(--app-red-soft);
+  --color-red-400: var(--app-red-soft);
+  --color-red-500: var(--app-red-main);
+  --color-red-600: var(--app-red-main);
+  --color-red-700: var(--app-red-strong);
+  --color-red-800: var(--app-red-strong);
+  --color-red-900: var(--app-red-surface);
+  --color-red-950: var(--app-red-deep);
+
+  --color-orange-500: var(--app-orange-main);
+
+  --color-green-200: var(--app-green-soft);
+  --color-green-400: var(--app-green-main);
+  --color-green-900: var(--app-green-deep);
+
+  --color-yellow-200: var(--app-yellow-soft);
+  --color-yellow-400: var(--app-yellow-main);
+  --color-yellow-900: var(--app-yellow-deep);
+
+  --color-line-train: var(--app-line-train);
+  --color-line-metro: var(--app-line-metro);
+  --color-line-tram: var(--app-line-tram);
+  --color-board-row-odd: var(--app-board-row-odd);
+  --color-board-row-even: var(--app-board-row-even);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 @keyframes custom-pulse {

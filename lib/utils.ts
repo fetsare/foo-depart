@@ -96,7 +96,7 @@ export function processDepartures(
         }
 
         const config = departureConfigMap.get(match[2]);
-        
+
         // Check if this specific direction should be prioritized
         let isPrioritized = config?.prioritized || false;
         if (isPrioritized && config?.prioritizedDirections) {
@@ -105,7 +105,7 @@ export function processDepartures(
             direction.toLowerCase().includes(filter.toLowerCase()),
           );
         }
-        
+
         return {
           name: match[2],
           transportType: match[1],

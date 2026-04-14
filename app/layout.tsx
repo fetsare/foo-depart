@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${oxygen.variable} antialiased font-sans`}
-        style={{ fontFamily: 'var(--font-oxygen)' }}
+        style={{ fontFamily: "var(--font-oxygen)" }}
       >
         {children}
         <WalkingRazor />

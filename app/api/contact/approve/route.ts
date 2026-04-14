@@ -77,7 +77,7 @@ export async function GET(request: Request) {
         {
           status: 401,
           headers: { "Content-Type": "text/html" },
-        }
+        },
       );
     }
 
@@ -162,7 +162,7 @@ ${CONTACT_SIGNATURE_NAME}
       {
         status: 200,
         headers: { "Content-Type": "text/html" },
-      }
+      },
     );
   } catch (error) {
     console.error("Error approving inquiry:", error);
@@ -183,7 +183,7 @@ ${CONTACT_SIGNATURE_NAME}
       {
         status: 500,
         headers: { "Content-Type": "text/html" },
-      }
+      },
     );
   }
 }

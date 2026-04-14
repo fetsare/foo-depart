@@ -23,5 +23,7 @@ export async function GET() {
   }
 
   const contributors = await response.json();
-  return Response.json(contributors.filter((contributor: any) => contributor.type !== "Bot")); // this removed vercel and copilot bots
+  return Response.json(
+    contributors.filter((contributor: any) => contributor.type !== "Bot"),
+  ); // this removed vercel and copilot bots
 }

@@ -6,6 +6,7 @@
 A Next.js departure board for the Stockholm region using the [Trafiklab Resrobot API](https://www.trafiklab.se/api/our-apis/resrobot-v21/).
 
 ## Contents
+
 - [Quickstart](#quickstart)
 - [Env](#env)
 - [Deploy](#deploy)
@@ -13,6 +14,7 @@ A Next.js departure board for the Stockholm region using the [Trafiklab Resrobot
 - [Notes](#notes)
 
 ## Quickstart
+
 1. Fork and clone.
 
 ```bash
@@ -45,7 +47,17 @@ code lib/departures.json
 npm run dev
 ```
 
+6. Open the stop ID lookup tool.
+
+```bash
+# in your browser
+http://localhost:3000/stop-lookup
+# or in my deployment
+https://depart.fredriketsare/stop-lookup
+```
+
 ## Env
+
 Required: Trafiklab/Resrobot API
 
 - `RESROBOT_ACCESS_ID`
@@ -84,6 +96,7 @@ Optional email signature used in approval/rejection replies:
 - `CONTACT_SIGNATURE_NAME`
 
 ## Deploy
+
 Deploy on Vercel.
 
 1. Import your fork in Vercel.
@@ -92,6 +105,7 @@ Deploy on Vercel.
 4. Deploy.
 
 ## Kiosk
+
 To run this as a live departure screen, you need:
 
 - a computer (Raspberry Pi, mini-PC, or old laptop)
@@ -101,5 +115,6 @@ To run this as a live departure screen, you need:
 Raspberry Pi guide: https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry-pi-in-kiosk-mode/
 
 ## Notes
+
 - The project was first launched at the student union pub Foo Bar under Studentkaren DISK (The student union DISK).
 - You can add custom contributor display names in `lib/contributor_names.json`.

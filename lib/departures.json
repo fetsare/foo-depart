@@ -22,7 +22,12 @@
       "id": 740000701,
       "departures": [
         { "line": "41", "minTimeThreshold": 14 },
-        { "line": "40", "minTimeThreshold": 14, "prioritized": true, "prioritizedDirections": ["Uppsala"] }
+        {
+          "line": "40",
+          "minTimeThreshold": 14,
+          "prioritized": true,
+          "prioritizedDirections": ["Uppsala"]
+        }
       ]
     },
     {

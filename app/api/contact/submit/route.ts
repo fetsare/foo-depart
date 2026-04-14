@@ -25,12 +25,12 @@ export async function POST(request: Request) {
     if (limited) {
       return NextResponse.json(
         { error: "Too many submissions. Please try again later." },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
     const { name, email, title, description, website } = await request.json();
-    
+
     if (website) {
       console.log("Bot detected via honeypot");
       return NextResponse.json({ success: true });
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       JWT_SECRET,
       {
         expiresIn: "120d",
-      }
+      },
     );
 
     const approveUrl = `${PUBLIC_BASE_URL}/api/contact/approve?token=${encodeURIComponent(token)}`;
@@ -81,7 +81,7 @@ This link will expire in 4 months.
     console.error("Error submitting inquiry:", error);
     return NextResponse.json(
       { error: "Failed to submit inquiry" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

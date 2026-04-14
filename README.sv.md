@@ -6,6 +6,7 @@
 En Next.js-baserad avgångstavla som visar avgångar i Stockholmsregionen via [Trafiklab Resrobot API](https://www.trafiklab.se/api/our-apis/resrobot-v21/).
 
 ## Innehåll
+
 - [Snabbstart](#snabbstart)
 - [Miljövariabler](#miljövariabler)
 - [Distribution](#distribution)
@@ -13,6 +14,7 @@ En Next.js-baserad avgångstavla som visar avgångar i Stockholmsregionen via [T
 - [Noteringar](#noteringar)
 
 ## Snabbstart
+
 1. Forka och klona.
 
 ```bash
@@ -45,7 +47,17 @@ code lib/departures.json
 npm run dev
 ```
 
+6. Öppna verktyget för stopp-ID-sökning.
+
+```bash
+# i din webbläsare
+http://localhost:3000/stop-lookup
+# eller i min deployment
+https://depart.fredriketsare/stop-lookup
+```
+
 ## Miljövariabler
+
 Trafiklab/Resrobot API
 
 - `RESROBOT_ACCESS_ID`
@@ -81,6 +93,7 @@ Valfri e-postsignatur för godkännande/avslag:
 - `CONTACT_SIGNATURE_NAME`
 
 ## Distribution
+
 Deploya på Vercel.
 
 1. Importera din fork i Vercel.
@@ -89,6 +102,7 @@ Deploya på Vercel.
 4. Deploya.
 
 ## Kioskläge
+
 För att köra detta som en live avgångstavla behöver du:
 
 - en dator (Raspberry Pi, mini-PC eller äldre laptop)
@@ -100,6 +114,6 @@ Guide för Raspberry Pi:
 - https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry-pi-in-kiosk-mode/
 
 ## Noteringar
+
 - Projektet lanserades först på studentpuben [Foo Bar](https://maps.app.goo.gl/TgiGXqVqhSn2ttnFA) under [Studentkaren DISK](https://disk.su.se).
 - Du kan ange egna visningsnamn för contributors i [lib/contributor_names.json](lib/contributor_names.json).
-

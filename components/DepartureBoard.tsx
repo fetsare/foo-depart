@@ -17,10 +17,10 @@ interface DepartureBoardProps {
 }
 
 const lineColorMap: Record<string, string> = {
-  Tåg: "bg-[#ec619f]",
-  Tunnelbana: "bg-[#007db8]",
+  Tåg: "bg-line-train",
+  Tunnelbana: "bg-line-metro",
   Buss: "bg-black",
-  Spårväg: "bg-[#b65f1f]",
+  Spårväg: "bg-line-tram",
 };
 
 const REFRESH_INTERVAL = 30000;
@@ -36,7 +36,7 @@ const cellTextSize =
   "text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl";
 
 const getRowBackground = (index: number) =>
-  index % 2 !== 0 ? "bg-[#0a0a0a]" : "bg-[#141414]";
+  index % 2 !== 0 ? "bg-board-row-odd" : "bg-board-row-even";
 
 const getLineColor = (lineType: string) =>
   lineColorMap[lineType] || "bg-gray-500";
@@ -59,21 +59,24 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
   const placeholderRows = Math.max(MIN_ROWS - initialDepartures.length, 0);
 
   const metro11Departures = initialDepartures.filter((d) => d.name === "11");
-  
+
   //check if next 11 is < 30 min AND the one after is either non-existent or > 2 hours, this determines if we should warn foo bar
   const nextMetro11 = metro11Departures[0];
-  const shouldShowWarning = 
+  const shouldShowWarning =
     nextMetro11 &&
     typeof nextMetro11.timeLeft === "number" &&
     nextMetro11.timeLeft < 30 &&
-    (!nextMetro11.nextDepartureTimeLeft || 
-     (typeof nextMetro11.nextDepartureTimeLeft === "number" && nextMetro11.nextDepartureTimeLeft > 120));
+    (!nextMetro11.nextDepartureTimeLeft ||
+      (typeof nextMetro11.nextDepartureTimeLeft === "number" &&
+        nextMetro11.nextDepartureTimeLeft > 120));
 
   return (
     <main className="min-h-screen bg-black text-white relative cursor-none">
       {(shouldShowWarning || testWarning) && (
         <LastMetroWarning
-          urgentDepartureTime={testWarning ? 15 : (nextMetro11?.timeLeft as number)}
+          urgentDepartureTime={
+            testWarning ? 15 : (nextMetro11?.timeLeft as number)
+          }
         />
       )}
 
