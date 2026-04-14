@@ -8,10 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lhci:collect": "lhci collect --url=https://depart.fredriketsare.se --numberOfRuns=1 --outputDir=.lighthouseci --settings.chromeFlags='--no-sandbox --disable-dev-shm-usage'",
-    "lhci:append": "node scripts/append-lighthouse-report.mjs",
-    "lhci": "npm run lhci:collect && npm run lhci:append"
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
@@ -26,7 +23,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@lhci/cli": "^0.14.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
