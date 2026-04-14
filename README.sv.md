@@ -12,6 +12,7 @@ En Next.js-baserad avgångstavla som visar avgångar i Stockholmsregionen via [T
 - [Distribution](#distribution)
 - [Kioskläge](#kioskläge)
 - [Noteringar](#noteringar)
+- [Statistik](#statistik)
 
 ## Snabbstart
 
@@ -113,3 +114,7 @@ Guide för Raspberry Pi:
 
 - Projektet lanserades först på studentpuben [Foo Bar](https://maps.app.goo.gl/TgiGXqVqhSn2ttnFA) under [Studentkaren DISK](https://disk.su.se).
 - Du kan ange egna visningsnamn för contributors i [lib/contributor_names.json](lib/contributor_names.json).
+
+## Statistik
+
+![lighthouse state](/public/lh.png)

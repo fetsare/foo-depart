@@ -12,6 +12,7 @@ A Next.js departure board for the Stockholm region using the [Trafiklab Resrobot
 - [Deploy](#deploy)
 - [Kiosk](#kiosk)
 - [Notes](#notes)
+- [Stats](#stats)
 
 ## Quickstart
 
@@ -112,5 +113,9 @@ Raspberry Pi guide: https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry
 
 ## Notes
 
-- The project was first launched at the student union pub Foo Bar under Studentkaren DISK (The student union DISK).
+- The project was first launched at the student union pub [Foo Bar](https://maps.app.goo.gl/TgiGXqVqhSn2ttnFA) under [The Student union DISK](https://disk.su.se)
 - You can add custom contributor display names in `lib/contributor_names.json`.
+
+## Stats
+
+![lighthouse state](/public/lh.png)
