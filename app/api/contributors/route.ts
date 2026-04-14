@@ -1,5 +1,9 @@
 import { GITHUB_OWNER, GITHUB_REPO } from "@/lib/constants";
 
+interface GitHubContributorResponseItem {
+  type?: string;
+}
+
 export async function GET() {
   if (!GITHUB_OWNER || !GITHUB_REPO) {
     return Response.json([]);
@@ -22,8 +26,9 @@ export async function GET() {
     );
   }
 
-  const contributors = await response.json();
+  const contributors =
+    (await response.json()) as GitHubContributorResponseItem[];
   return Response.json(
-    contributors.filter((contributor: any) => contributor.type !== "Bot"),
+    contributors.filter((contributor) => contributor.type !== "Bot"),
   ); // this removed vercel and copilot bots
 }

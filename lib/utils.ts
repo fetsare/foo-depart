@@ -95,13 +95,13 @@ export function processDepartures(
           };
         }
 
-        const config = departureConfigMap.get(match[2]);
+        const departureConfig = departureConfigMap.get(match[2]);
 
         // Check if this specific direction should be prioritized
-        let isPrioritized = config?.prioritized || false;
-        if (isPrioritized && config?.prioritizedDirections) {
+        let isPrioritized = departureConfig?.prioritized || false;
+        if (isPrioritized && departureConfig?.prioritizedDirections) {
           const direction = removeParentheses(departure.direction);
-          isPrioritized = config.prioritizedDirections.some((filter) =>
+          isPrioritized = departureConfig.prioritizedDirections.some((filter) =>
             direction.toLowerCase().includes(filter.toLowerCase()),
           );
         }
@@ -113,7 +113,7 @@ export function processDepartures(
           timeLeft: timeDifference,
           direction: removeParentheses(departure.direction),
           station: stationName,
-          config: config,
+          config: departureConfig,
           prioritized: isPrioritized,
         };
       })
@@ -142,7 +142,7 @@ export function processDepartures(
 
         return true;
       })
-      .map(({ config, ...rest }) => rest); // Remove config but keep prioritized
+      .map(({ ...rest }) => rest);
 
     allProcessedDepartures.push(...processedDepartures);
   });

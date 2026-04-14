@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     let inquiryData: InquiryToken;
     try {
       inquiryData = jwt.verify(token, JWT_SECRET) as InquiryToken;
-    } catch (error) {
+    } catch {
       return new NextResponse(
         `
         <!DOCTYPE html>

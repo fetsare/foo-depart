@@ -40,16 +40,20 @@ export default async function Contributors() {
             </a>
           )}
           {hasBadgeRepo && (
-            <img
+            <Image
               src={`https://img.shields.io/github/last-commit/${GITHUB_BADGE_REPO}`}
               alt="GitHub last commit"
+              width={85}
+              height={16}
               className="h-4"
             />
           )}
           {hasBadgeRepo && (
-            <img
+            <Image
               src={`https://img.shields.io/github/license/${GITHUB_BADGE_REPO}`}
               alt="GitHub license"
+              width={73}
+              height={16}
               className="h-4"
             />
           )}

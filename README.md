@@ -49,12 +49,8 @@ npm run dev
 
 6. Open the stop ID lookup tool.
 
-```bash
-# in your browser
-http://localhost:3000/stop-lookup
-# or in my deployment
-https://depart.fredriketsare/stop-lookup
-```
+- Local: [http://localhost:3000/stop-lookup](http://localhost:3000/stop-lookup)
+- Deployed: [https://depart.fredriketsare.se/stop-lookup](https://depart.fredriketsare.se/stop-lookup)
 
 ## Env
 

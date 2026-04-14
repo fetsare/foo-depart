@@ -49,12 +49,8 @@ npm run dev
 
 6. Öppna verktyget för stopp-ID-sökning.
 
-```bash
-# i din webbläsare
-http://localhost:3000/stop-lookup
-# eller i min deployment
-https://depart.fredriketsare/stop-lookup
-```
+- Lokalt: [http://localhost:3000/stop-lookup](http://localhost:3000/stop-lookup)
+- Deployment: [https://depart.fredriketsare.se/stop-lookup](https://depart.fredriketsare.se/stop-lookup)
 
 ## Miljövariabler
 
