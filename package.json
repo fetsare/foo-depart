@@ -9,7 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lhci:collect": "lhci collect --url=http://localhost:3000 --numberOfRuns=1 --settings.chromeFlags='--no-sandbox --disable-dev-shm-usage'",
+    "lhci:collect": "lhci collect --url=https://depart.fredriketsare.se --numberOfRuns=1 --settings.chromeFlags='--no-sandbox --disable-dev-shm-usage'",
     "lhci:append": "node scripts/append-lighthouse-report.mjs",
     "lhci": "npm run lhci:collect && npm run lhci:append"
   },

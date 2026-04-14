@@ -40,7 +40,8 @@ const categories = latest.categories || {};
 
 const toPercent = (score) => `${Math.round((score || 0) * 100)}%`;
 const timestamp = new Date().toISOString();
-const testedUrl = latest.finalUrl || latest.requestedUrl || "http://localhost:3000";
+const testedUrl =
+  latest.finalUrl || latest.requestedUrl || "https://depart.fredriketsare.se";
 
 const englishBlock = [
   "<!-- LIGHTHOUSE:START -->",
