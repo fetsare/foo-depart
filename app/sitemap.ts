@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
+import { PUBLIC_BASE_URL } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://depart.fredriketsare.se";
+  const baseUrl = PUBLIC_BASE_URL.replace(/\/$/, "");
 
   return [
     {

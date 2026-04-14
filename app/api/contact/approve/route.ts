@@ -2,35 +2,42 @@ import { NextResponse } from "next/server";
 import { Octokit } from "@octokit/rest";
 import { Resend } from "resend";
 import jwt from "jsonwebtoken";
+import {
+  ADMIN_EMAIL,
+  CONTACT_SIGNATURE_NAME,
+  GITHUB_BASE_BRANCH,
+  GITHUB_OWNER,
+  GITHUB_REPO,
+  GITHUB_TOKEN,
+  JWT_SECRET,
+  RESEND_API_KEY,
+} from "@/lib/constants";
 
 const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
+  auth: GITHUB_TOKEN,
 });
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const rawJwtSecret = process.env.JWT_SECRET;
-if (!rawJwtSecret) {
+const resend = new Resend(RESEND_API_KEY);
+if (!JWT_SECRET) {
   throw new Error("JWT_SECRET environment variable is not set");
 }
-const JWT_SECRET = rawJwtSecret;
-
-const rawAdminEmail = process.env.ADMIN_EMAIL;
-if (!rawAdminEmail) {
+if (!ADMIN_EMAIL) {
   throw new Error("ADMIN_EMAIL environment variable is not set");
 }
-const ADMIN_EMAIL = rawAdminEmail;
 
-const rawGithubOwner = process.env.GITHUB_OWNER;
-if (!rawGithubOwner) {
+if (!GITHUB_OWNER) {
   throw new Error("GITHUB_OWNER environment variable is not set");
 }
-const GITHUB_OWNER = rawGithubOwner;
 
-const rawGithubRepo = process.env.GITHUB_REPO;
-if (!rawGithubRepo) {
+if (!GITHUB_REPO) {
   throw new Error("GITHUB_REPO environment variable is not set");
 }
-const GITHUB_REPO = rawGithubRepo;
+if (!GITHUB_TOKEN) {
+  throw new Error("GITHUB_TOKEN environment variable is not set");
+}
+if (!RESEND_API_KEY) {
+  throw new Error("RESEND_API_KEY environment variable is not set");
+}
 
 interface InquiryToken {
   name: string;
@@ -101,7 +108,7 @@ ${description}
     const { data: ref } = await octokit.git.getRef({
       owner: GITHUB_OWNER,
       repo: GITHUB_REPO,
-      ref: "heads/main",
+      ref: `heads/${GITHUB_BASE_BRANCH}`,
     });
 
     await octokit.git.createRef({
@@ -126,7 +133,7 @@ Your inquiry "${title}" has been approved and a GitHub issue has been created to
 GitHub Issue: ${issue.data.html_url}
 
 Best regards,
-Ugla
+${CONTACT_SIGNATURE_NAME}
       `,
     });
 

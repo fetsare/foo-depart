@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
+import { GITHUB_REPO_URL } from "@/lib/constants";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -81,14 +82,18 @@ export default function ContactForm() {
           Report missing bus or train information, suggest improvements, or
           share your feedback about the departure board. Once approved, an issue
           will be automatically created in the{" "}
-          <a
-            href="https://github.com/fetsare/foo-depart"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline hover:no-underline transition-colors"
-          >
-            GitHub repository
-          </a>
+          {GITHUB_REPO_URL ? (
+            <a
+              href={GITHUB_REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline hover:no-underline transition-colors"
+            >
+              GitHub repository
+            </a>
+          ) : (
+            "configured GitHub repository"
+          )}
           .
         </p>
 

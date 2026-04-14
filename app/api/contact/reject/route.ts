@@ -1,9 +1,24 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import jwt from "jsonwebtoken";
+import {
+  ADMIN_EMAIL,
+  CONTACT_SIGNATURE_NAME,
+  JWT_SECRET,
+  RESEND_API_KEY,
+} from "@/lib/constants";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const JWT_SECRET = process.env.JWT_SECRET!;
+const resend = new Resend(RESEND_API_KEY);
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is not set");
+}
+if (!ADMIN_EMAIL) {
+  throw new Error("ADMIN_EMAIL environment variable is not set");
+}
+if (!RESEND_API_KEY) {
+  throw new Error("RESEND_API_KEY environment variable is not set");
+}
 
 interface InquiryToken {
   name: string;
@@ -50,7 +65,7 @@ export async function GET(request: Request) {
     const { name, email, title } = inquiryData;
 
     await resend.emails.send({
-      from: process.env.ADMIN_EMAIL!,
+      from: ADMIN_EMAIL,
       to: email,
       subject: "Update on your inquiry",
       text: `
@@ -63,7 +78,7 @@ Thank you for submitting your inquiry "${title}". After review, we've decided no
 We appreciate your interest and encourage you to submit future ideas!
 
 Best regards,
-The Team
+${CONTACT_SIGNATURE_NAME}
       `,
     });
 

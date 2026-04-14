@@ -2,13 +2,20 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import jwt from "jsonwebtoken";
 import rateLimit from "../../rateLimit";
+import {
+  ADMIN_EMAIL,
+  JWT_SECRET,
+  PUBLIC_BASE_URL,
+  RESEND_API_KEY,
+} from "@/lib/constants";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const rawJwtSecret = process.env.JWT_SECRET;
-if (!rawJwtSecret) {
+const resend = new Resend(RESEND_API_KEY);
+if (!JWT_SECRET) {
   throw new Error("JWT_SECRET environment variable is not set");
 }
-const JWT_SECRET = rawJwtSecret;
+if (!ADMIN_EMAIL) {
+  throw new Error("ADMIN_EMAIL environment variable is not set");
+}
 
 const limiter = rateLimit(2, 60 * 60 * 1000);
 
@@ -43,14 +50,12 @@ export async function POST(request: Request) {
       }
     );
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-    const approveUrl = `${baseUrl}/api/contact/approve?token=${encodeURIComponent(token)}`;
-    const rejectUrl = `${baseUrl}/api/contact/reject?token=${encodeURIComponent(token)}`;
+    const approveUrl = `${PUBLIC_BASE_URL}/api/contact/approve?token=${encodeURIComponent(token)}`;
+    const rejectUrl = `${PUBLIC_BASE_URL}/api/contact/reject?token=${encodeURIComponent(token)}`;
 
     await resend.emails.send({
-      from: process.env.ADMIN_EMAIL!,
-      to: process.env.ADMIN_EMAIL!,
+      from: ADMIN_EMAIL,
+      to: ADMIN_EMAIL,
       subject: `New Inquiry: ${title}`,
       text: `
 New Inquiry Received

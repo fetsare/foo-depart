@@ -1,11 +1,16 @@
 "use server";
 
 import data from "@/lib/departures.json";
-import { type Station, type ApiDeparture, type GitHubContributor } from "@/lib/types";
+import {
+  type Station,
+  type ApiDeparture,
+  type GitHubContributor,
+} from "@/lib/types";
 import {
   RESROBOT_API_BASE_URL,
   RESROBOT_ACCESS_ID,
   API_DURATION,
+  PUBLIC_BASE_URL,
 } from "@/lib/constants";
 
 const { stations } = data as { stations: Station[] };
@@ -17,21 +22,12 @@ export async function fetchRawDepartures() {
   const allResults = await Promise.all(
     stations.map(async (station) => {
       try {
-        const fetchTime = Date.now();
         const response = await fetch(
           `${RESROBOT_API_BASE_URL}?id=${station.id}&format=json&accessId=${RESROBOT_ACCESS_ID}&duration=${API_DURATION}`,
           {
             next: { revalidate: 600 },
           },
         );
-        const responseTime = Date.now() - fetchTime;
-
-        // this is not guarantee but its something
-        // const isCached = responseTime < 10;
-        // console.log(
-        //   `[${station.name}] ${isCached ? "CACHE HIT" : "CACHE MISS"} (${responseTime}ms)`,
-        // );
-
         if (!response.ok) {
           console.error(
             `Failed to fetch departures for station ${station.name}`,
@@ -58,16 +54,9 @@ export async function fetchRawDepartures() {
 
 export async function fetchContributors(): Promise<GitHubContributor[]> {
   try {
-    const baseUrl = process.env.NODE_ENV === "development" 
-      ? "http://localhost:3000" 
-      : (process.env.NEXT_PUBLIC_APP_URL || `https://${process.env.VERCEL_URL}`);
-    
-    const response = await fetch(
-      `${baseUrl}/api/contributors`,
-      {
-        next: { revalidate: 3600 },
-      },
-    );
+    const response = await fetch(`${PUBLIC_BASE_URL}/api/contributors`, {
+      next: { revalidate: 3600 },
+    });
 
     if (!response.ok) {
       console.error("Failed to fetch contributors");

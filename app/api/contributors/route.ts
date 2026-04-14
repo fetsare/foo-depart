@@ -1,6 +1,12 @@
+import { GITHUB_OWNER, GITHUB_REPO } from "@/lib/constants";
+
 export async function GET() {
+  if (!GITHUB_OWNER || !GITHUB_REPO) {
+    return Response.json([]);
+  }
+
   const response = await fetch(
-    `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/contributors`,
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contributors`,
     {
       headers: {
         Accept: "application/vnd.github.v3+json",
