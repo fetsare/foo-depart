@@ -10,7 +10,9 @@ import {
   RESROBOT_API_BASE_URL,
   RESROBOT_ACCESS_ID,
   API_DURATION,
-  PUBLIC_BASE_URL,
+  GITHUB_OWNER,
+  GITHUB_REPO,
+  GITHUB_TOKEN,
 } from "@/lib/constants";
 
 const { stations } = data as { stations: Station[] };
@@ -53,18 +55,29 @@ export async function fetchRawDepartures() {
 }
 
 export async function fetchContributors(): Promise<GitHubContributor[]> {
+  if (!GITHUB_OWNER || !GITHUB_REPO) {
+    return [];
+  }
+
   try {
-    const response = await fetch(`${PUBLIC_BASE_URL}/api/contributors`, {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contributors`,
+      {
+        headers: {
+          Accept: "application/vnd.github.v3+json",
+          ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+        },
+        next: { revalidate: 3600 },
+      },
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch contributors");
       return [];
     }
 
-    const contributors: GitHubContributor[] = await response.json();
-    return contributors;
+    const contributors = (await response.json()) as GitHubContributor[];
+    return contributors.filter((c) => c.type !== "Bot");
   } catch (error) {
     console.error("Error fetching contributors:", error);
     return [];
