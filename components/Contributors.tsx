@@ -46,6 +46,7 @@ export default async function Contributors() {
               width={85}
               height={16}
               className="h-4"
+              unoptimized
             />
           )}
           {hasBadgeRepo && (
@@ -55,6 +56,7 @@ export default async function Contributors() {
               width={73}
               height={16}
               className="h-4"
+              unoptimized
             />
           )}
         </div>
