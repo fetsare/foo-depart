@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import DepartureBoard from "@/components/DepartureBoard";
 import Contributors from "@/components/Contributors";
 import { fetchRawDepartures } from "@/lib/actions";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { validateConfig } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   validateConfig();
