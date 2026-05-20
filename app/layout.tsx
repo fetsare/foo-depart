@@ -8,6 +8,7 @@ const oxygen = Oxygen({
   weight: ["300", "400", "700"],
   subsets: ["latin"],
   variable: "--font-oxygen",
+  display: "swap",
 });
 
 export const viewport: Viewport = {
