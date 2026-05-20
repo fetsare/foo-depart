@@ -9,7 +9,7 @@ const VERCEL_BASE_URL = process.env.VERCEL_URL
   : "";
 
 export const PUBLIC_BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
   VERCEL_BASE_URL ||
   "http://localhost:3000";
 
