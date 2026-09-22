@@ -15,38 +15,26 @@ export const getStockholmTime = (): Date => {
   return new Date(stockholmTimeString);
 };
 
+// departureTime is a full ISO datetime string (e.g. "2026-09-22T19:26:52"),
+// naive local Stockholm wall-clock time, same reference frame as getStockholmTime().
 export const formatTimeDifference = (departureTime: string): number => {
   const now = getStockholmTime();
-
-  const [hours, minutes] = departureTime.split(":").map(Number);
-
-  const departureDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    hours,
-    minutes,
-  );
-
-  if (departureDate < now) {
-    departureDate.setDate(departureDate.getDate() + 1);
-  }
+  const departureDate = new Date(departureTime);
 
   const differenceInMs = departureDate.getTime() - now.getTime();
 
-  const differenceInMin = Math.ceil(differenceInMs / 1000 / 60);
-
-  return differenceInMin;
+  return Math.ceil(differenceInMs / 1000 / 60);
 };
 
 export const removeParentheses = (input: string): string => {
   return input.replace(/\s*\(.*?\)/g, "");
 };
 
-// ResRobot has changed casing of transport type names before (e.g. "Buss" -> "buss"),
-// normalize so it reliably matches the lineColorMap keys in DepartureBoard.
-const normalizeTransportType = (raw: string): string =>
-  raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+// departureTime is an ISO datetime string like "2026-09-22T19:26:52";
+// slice the clock portion directly rather than going through Date/Intl,
+// since the string's timezone is ambiguous (see formatTimeDifference above).
+export const formatClockTime = (departureTime: string): string =>
+  departureTime.slice(11, 16);
 
 export const formatMinutesToReadable = (minutes: number | string): string => {
   if (typeof minutes !== "number") {
@@ -79,45 +67,27 @@ export function processDepartures(
 
     const processedDepartures = departures
       .map((departure) => {
-        const timeWithoutSeconds = departure.time
-          .split(":")
-          .slice(0, 2)
-          .join(":");
-        const match = departure.name.match(
-          /\b(Buss|Tunnelbana|Tåg|Spårväg)\s*(\d+[A-Z]?)\b/i,
-        );
-        const timeDifference = formatTimeDifference(departure.time);
-
-        if (!match) {
-          return {
-            name: "Unknown",
-            transportType: "Unknown",
-            time: timeWithoutSeconds,
-            timeLeft: timeDifference,
-            direction: removeParentheses(departure.direction),
-            station: stationName,
-            config: undefined,
-          };
-        }
-
-        const departureConfig = departureConfigMap.get(match[2]);
+        const direction = removeParentheses(departure.direction);
+        const departureConfig = departureConfigMap.get(departure.name);
 
         // Check if this specific direction should be prioritized
         let isPrioritized = departureConfig?.prioritized || false;
         if (isPrioritized && departureConfig?.prioritizedDirections) {
-          const direction = removeParentheses(departure.direction);
           isPrioritized = departureConfig.prioritizedDirections.some((filter) =>
             direction.toLowerCase().includes(filter.toLowerCase()),
           );
         }
 
         return {
-          name: match[2],
-          transportType: normalizeTransportType(match[1]),
-          time: timeWithoutSeconds,
-          timeLeft: timeDifference,
-          direction: removeParentheses(departure.direction),
+          name: departure.name,
+          transportType: departure.transportType,
+          time: formatClockTime(departure.time),
+          timeLeft: formatTimeDifference(departure.time),
+          direction,
           station: stationName,
+          canceled: departure.canceled,
+          delayMinutes: departure.delayMinutes,
+          isRealtime: departure.isRealtime,
           config: departureConfig,
           prioritized: isPrioritized,
         };
@@ -126,13 +96,7 @@ export function processDepartures(
         const config = departure.config;
         if (!config) return false;
 
-        if (
-          departure.time === "Departed" ||
-          departure.name === "Unknown" ||
-          departure.timeLeft < 0
-        ) {
-          return false;
-        }
+        if (departure.timeLeft < 0) return false;
 
         const minTimeThreshold =
           config.minTimeThreshold ?? DEFAULT_MIN_TIME_THRESHOLD;

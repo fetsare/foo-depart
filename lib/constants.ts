@@ -1,8 +1,16 @@
-export const RESROBOT_API_BASE_URL =
-  process.env.RESROBOT_API_BASE_URL ||
-  "https://api.resrobot.se/v2.1/departureBoard";
+export const TRAFIKLAB_REALTIME_API_BASE_URL =
+  process.env.TRAFIKLAB_REALTIME_API_BASE_URL ||
+  "https://realtime-api.trafiklab.se/v1";
 
-export const RESROBOT_ACCESS_ID = process.env.RESROBOT_ACCESS_ID || "";
+export const TRAFIKLAB_REALTIME_API_KEY =
+  process.env.TRAFIKLAB_REALTIME_API_KEY || "";
+
+// 3 configured stations * (30 days * 86400s / 90s) ~= 86,400 calls/month,
+// fits Trafiklab's free Bronze tier (100k/month) with margin.
+export const REALTIME_CACHE_SECONDS = parseInt(
+  process.env.REALTIME_CACHE_SECONDS || "90",
+  10,
+);
 
 const VERCEL_BASE_URL = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -40,8 +48,6 @@ export const GITHUB_BADGE_REPO =
 export const CONTACT_SIGNATURE_NAME =
   process.env.CONTACT_SIGNATURE_NAME || "The Team";
 
-export const API_DURATION = parseInt(process.env.API_DURATION || "120", 10);
-
 export const DEFAULT_MIN_TIME_THRESHOLD = parseInt(
   process.env.NEXT_PUBLIC_DEFAULT_MIN_TIME_THRESHOLD || "7",
   10,
@@ -54,9 +60,9 @@ export const MAX_DEPARTURES_TO_DISPLAY = parseInt(
 
 export const validateConfig = () => {
   // required env variables
-  if (!RESROBOT_ACCESS_ID) {
+  if (!TRAFIKLAB_REALTIME_API_KEY) {
     throw new Error(
-      "RESROBOT_ACCESS_ID is required. Please set it in your environment variables.",
+      "TRAFIKLAB_REALTIME_API_KEY is required. Please set it in your environment variables.",
     );
   }
 };

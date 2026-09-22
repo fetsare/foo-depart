@@ -4,18 +4,33 @@ import data from "@/lib/departures.json";
 import {
   type Station,
   type ApiDeparture,
+  type RealtimeDeparture,
   type GitHubContributor,
 } from "@/lib/types";
 import {
-  RESROBOT_API_BASE_URL,
-  RESROBOT_ACCESS_ID,
-  API_DURATION,
+  TRAFIKLAB_REALTIME_API_BASE_URL,
+  TRAFIKLAB_REALTIME_API_KEY,
+  REALTIME_CACHE_SECONDS,
   GITHUB_OWNER,
   GITHUB_REPO,
   GITHUB_TOKEN,
 } from "@/lib/constants";
 
 const { stations } = data as { stations: Station[] };
+
+// isolates every assumption about the Trafiklab Realtime API's raw shape,
+// so a future field-name change only needs a fix here
+function mapRealtimeDeparture(raw: RealtimeDeparture): ApiDeparture {
+  return {
+    name: raw.route.designation,
+    time: raw.realtime || raw.scheduled,
+    direction: raw.route.direction || raw.route.destination?.name || "",
+    transportType: raw.route.transport_mode,
+    canceled: raw.canceled,
+    delayMinutes: Math.round((raw.delay || 0) / 60),
+    isRealtime: raw.is_realtime,
+  };
+}
 
 // function with cached api call, makes sure we dont overuse api quota
 export async function fetchRawDepartures() {
@@ -25,9 +40,9 @@ export async function fetchRawDepartures() {
     stations.map(async (station) => {
       try {
         const response = await fetch(
-          `${RESROBOT_API_BASE_URL}?id=${station.id}&format=json&accessId=${RESROBOT_ACCESS_ID}&duration=${API_DURATION}`,
+          `${TRAFIKLAB_REALTIME_API_BASE_URL}/departures/${station.id}?key=${TRAFIKLAB_REALTIME_API_KEY}`,
           {
-            next: { revalidate: 600 },
+            next: { revalidate: REALTIME_CACHE_SECONDS },
           },
         );
         if (!response.ok) {
@@ -38,7 +53,10 @@ export async function fetchRawDepartures() {
         }
 
         const data = await response.json();
-        const departures: ApiDeparture[] = data.Departure || [];
+        const rawDepartures: RealtimeDeparture[] = data.departures || [];
+        const departures: ApiDeparture[] = rawDepartures.map(
+          mapRealtimeDeparture,
+        );
         return { station, departures };
       } catch (stationError) {
         console.error(

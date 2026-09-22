@@ -21,12 +21,33 @@ export interface ProcessedDeparture {
   station: string;
   nextDepartureTimeLeft?: number;
   prioritized?: boolean;
+  canceled: boolean;
+  delayMinutes: number;
+  isRealtime: boolean;
+}
+
+export interface RealtimeDeparture {
+  scheduled: string;
+  realtime: string;
+  delay: number;
+  canceled: boolean;
+  is_realtime: boolean;
+  route: {
+    designation: string;
+    transport_mode: string;
+    direction: string;
+    destination: { name: string };
+  };
 }
 
 export interface ApiDeparture {
   name: string;
   time: string;
   direction: string;
+  transportType: string;
+  canceled: boolean;
+  delayMinutes: number;
+  isRealtime: boolean;
 }
 
 // generated this from the api response
