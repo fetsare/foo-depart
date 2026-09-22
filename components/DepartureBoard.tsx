@@ -110,7 +110,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
               <th
                 className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
-                Departs
+                Next
               </th>
               <th
                 className={`${headerPadding} text-left whitespace-nowrap ${headerTextSize} text-orange-500`}
@@ -125,7 +125,7 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
               <th
                 className={`${headerPadding} text-right whitespace-nowrap ${headerTextSize} text-orange-500`}
               >
-                Next
+                Following
               </th>
             </tr>
           </thead>
@@ -181,15 +181,15 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
                     className={`${commonPadding} text-left text-orange-500 ${cellTextSize}`}
                   >
                     <div className="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 sm:gap-2">
+                      {departure.time}
                       <span
-                        className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
+                        className={`inline-block shrink-0 w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
                           departure.isRealtime ? "bg-green-400" : "bg-gray-600"
                         }`}
                         title={
                           departure.isRealtime ? "Live data" : "Scheduled time"
                         }
                       />
-                      {departure.time}
                     </div>
                   </td>
                   <td
