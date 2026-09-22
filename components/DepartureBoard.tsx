@@ -17,11 +17,13 @@ interface DepartureBoardProps {
 }
 
 const lineColorMap: Record<string, string> = {
-  Tåg: "bg-line-train",
-  Tunnelbana: "bg-line-metro",
-  Buss: "bg-black",
-  Spårväg: "bg-line-tram",
+  TRAIN: "bg-line-train",
+  METRO: "bg-line-metro",
+  BUS: "bg-black",
+  TRAM: "bg-line-tram",
 };
+
+const MEANINGFUL_DELAY_MINUTES = 2;
 
 const REFRESH_INTERVAL = 30000;
 const MIN_ROWS = 5;
@@ -158,15 +160,35 @@ export default function DepartureBoard({ rawDepartures }: DepartureBoardProps) {
                   </td>
                   <td
                     className={`${commonPadding} text-left font-bold ${cellTextSize} whitespace-nowrap ${
-                      isUrgent ? "text-red-600" : "text-orange-500"
+                      departure.canceled
+                        ? "text-gray-500 line-through"
+                        : isUrgent
+                          ? "text-red-600"
+                          : "text-orange-500"
                     }`}
                   >
-                    {formatMinutesToReadable(departure.timeLeft)}
+                    {departure.canceled
+                      ? "Inställd"
+                      : formatMinutesToReadable(departure.timeLeft)}
+                    {!departure.canceled &&
+                      departure.delayMinutes >= MEANINGFUL_DELAY_MINUTES && (
+                        <span className="ml-1 sm:ml-2 text-red-600">
+                          +{departure.delayMinutes}
+                        </span>
+                      )}
                   </td>
                   <td
                     className={`${commonPadding} text-left text-orange-500 ${cellTextSize}`}
                   >
-                    <div className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    <div className="whitespace-nowrap overflow-hidden text-ellipsis flex items-center gap-1 sm:gap-2">
+                      <span
+                        className={`inline-block w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
+                          departure.isRealtime ? "bg-green-400" : "bg-gray-600"
+                        }`}
+                        title={
+                          departure.isRealtime ? "Live data" : "Scheduled time"
+                        }
+                      />
                       {departure.time}
                     </div>
                   </td>
