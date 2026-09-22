@@ -43,6 +43,11 @@ export const removeParentheses = (input: string): string => {
   return input.replace(/\s*\(.*?\)/g, "");
 };
 
+// ResRobot has changed casing of transport type names before (e.g. "Buss" -> "buss"),
+// normalize so it reliably matches the lineColorMap keys in DepartureBoard.
+const normalizeTransportType = (raw: string): string =>
+  raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+
 export const formatMinutesToReadable = (minutes: number | string): string => {
   if (typeof minutes !== "number") {
     return String(minutes);
@@ -108,7 +113,7 @@ export function processDepartures(
 
         return {
           name: match[2],
-          transportType: match[1],
+          transportType: normalizeTransportType(match[1]),
           time: timeWithoutSeconds,
           timeLeft: timeDifference,
           direction: removeParentheses(departure.direction),
