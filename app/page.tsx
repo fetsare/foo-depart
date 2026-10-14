@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import DepartureBoard from "@/components/DepartureBoard";
 import Contributors from "@/components/Contributors";
 import { fetchRawDepartures } from "@/lib/actions";
@@ -11,6 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+  // render per request instead of ISR: each ISR regeneration writes ~7 cache
+  // entries (HTML, RSC, segments), which blew through Vercel's free ISR write
+  // quota. Trafiklab calls are still deduplicated by the fetch cache.
+  await connection();
   validateConfig();
 
   const rawData = await fetchRawDepartures();
